@@ -29,3 +29,6 @@ out/
 .idea/
 .DS_Store
 *.log
+data/raw/
+__pycache__/
+.venv/
