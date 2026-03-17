@@ -1,10 +1,11 @@
 # IA Mobility
 
-Bienvenue sur le dépôt du projet IA Mobility. Le projet utilise une architecture Monorepo pour centraliser le Frontend, le Backend et les services d'IA.
+Bienvenue sur le dépôt du projet IA Mobility.
+Le projet utilise une architecture Monorepo pour centraliser le Frontend, le Backend et les services d'IA.
 
 ## Etat Actuel du Projet
 
-Le squelette du monorepo est initialisé sur la branche main.
+Le squelette du monorepo est initialisé sur la branche **main**.
 
 ### Tâches déjà accomplies (Teddy):
 
