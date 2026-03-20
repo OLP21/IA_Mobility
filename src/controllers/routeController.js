@@ -1,13 +1,14 @@
 const routeService = require("../services/routeService");
 const geocodeService = require("../services/geocodeService");
-const pool = require("../config/db");
 const weatherService = require("../services/weatherService");
-// ==========================
+const aiService = require("../services/aiService");
+const pool = require("../config/db");
+
 // POST /api/route
-// ==========================
 exports.getRoute = async (req, res) => {
     try {
-        const { origin, destination } = req.body;
+        const { origin, destination, maxRoutes } = req.body;
+        const requestedMaxRoutes = Math.min(Math.max(parseInt(maxRoutes) || 3, 1), 5);
 
         if (!origin || !destination) {
             return res.status(400).json({
@@ -18,7 +19,6 @@ exports.getRoute = async (req, res) => {
         let originCoords = origin;
         let destinationCoords = destination;
 
-        // Géocodage si texte
         if (typeof origin === "string") {
             originCoords = await geocodeService.getCoordinates(origin);
         }
@@ -27,20 +27,17 @@ exports.getRoute = async (req, res) => {
             destinationCoords = await geocodeService.getCoordinates(destination);
         }
 
-        // Calcul itinéraire
-        const routeData = await routeService.calculateRoute(
-            originCoords,
-            destinationCoords
-        );
-
         const weather = await weatherService.getWeather(
             originCoords[1],
             originCoords[0]
         );
 
-        // ==========================
-        // INSERT route_requests
-        // ==========================
+        const routesData = await routeService.calculateRoutes(
+            originCoords,
+            destinationCoords,
+            requestedMaxRoutes
+        );
+
         const requestQuery = `
             INSERT INTO route_requests
             (origin_lat, origin_lng, destination_lat, destination_lng, route_summary)
@@ -49,51 +46,60 @@ exports.getRoute = async (req, res) => {
         `;
 
         const requestValues = [
-            originCoords[1], // lat
-            originCoords[0], // lng
+            originCoords[1],
+            originCoords[0],
             destinationCoords[1],
             destinationCoords[0],
-            `Route from ${origin} to ${destination}`
+            `Routes from ${origin} to ${destination}`
         ];
 
         const requestResult = await pool.query(requestQuery, requestValues);
         const requestId = requestResult.rows[0].id;
 
-        // ==========================
-        // INSERT route_results
-        // ==========================
-        const resultQuery = `
-            INSERT INTO route_results
-            (request_id, distance_meters, duration_seconds, geometry, weather_info)
-            VALUES ($1, $2, $3, $4, $5)
-            RETURNING *;
-        `;
+        const analyzedRoutes = [];
 
-        const resultValues = [
-            requestId,
-            Math.round(routeData.distance_meters),
-            Math.round(routeData.duration_seconds),
-            routeData.geometry,
-            JSON.stringify(weather)
-        ];
+        for (const routeData of routesData) {
+            const analysis = aiService.analyzeRoute(routeData, weather);
 
-        const routeResult = await pool.query(resultQuery, resultValues);
+            const resultQuery = `
+                INSERT INTO route_results
+                (request_id, distance_meters, duration_seconds, geometry, weather_info)
+                VALUES ($1, $2, $3, $4, $5)
+                RETURNING *;
+            `;
 
-        // ==========================
-        // RESPONSE
-        // ==========================
+            const resultValues = [
+                requestId,
+                Math.round(routeData.distance_meters),
+                Math.round(routeData.duration_seconds),
+                JSON.stringify(routeData.geometry),
+                JSON.stringify(weather)
+            ];
+
+            const routeResult = await pool.query(resultQuery, resultValues);
+
+            analyzedRoutes.push({
+                result_id: routeResult.rows[0].id,
+                route_index: routeData.route_index,
+                distance_meters: routeData.distance_meters,
+                duration_seconds: routeData.duration_seconds,
+                analysis
+            });
+        }
+
+        analyzedRoutes.sort((a, b) => b.analysis.score - a.analysis.score);
+
         return res.status(201).json({
-            message: "Route calculée et enregistrée",
+            message: "Trajets calculés et analysés avec succès",
             origin,
             destination,
             originCoords,
             destinationCoords,
-            route: {
-                distance_meters: routeData.distance_meters,
-                duration_seconds: routeData.duration_seconds
-            },
-            weather: weather,
-            request_id: requestId
+            weather,
+            request_id: requestId,
+            routes_count: analyzedRoutes.length,
+            requested_max_routes: requestedMaxRoutes,
+            routes: analyzedRoutes
         });
 
     } catch (error) {
@@ -110,9 +116,7 @@ exports.getRoute = async (req, res) => {
     }
 };
 
-// ==========================
 // GET /api/routes
-// ==========================
 exports.getRoutesHistory = async (req, res) => {
     try {
         const query = `
@@ -131,7 +135,7 @@ exports.getRoutesHistory = async (req, res) => {
             LEFT JOIN route_results rres
                 ON rr.id = rres.request_id
             ORDER BY rr.created_at DESC
-            LIMIT 10;
+            LIMIT 20;
         `;
 
         const result = await pool.query(query);
@@ -141,7 +145,6 @@ exports.getRoutesHistory = async (req, res) => {
             count: result.rows.length,
             data: result.rows
         });
-
     } catch (error) {
         console.error("ERREUR HISTORIQUE :", error.message);
 
