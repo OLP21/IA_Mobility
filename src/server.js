@@ -1,10 +1,9 @@
-const dotenv = require("dotenv");
-dotenv.config();
-console.log(`Server running on port ${PORT}`);
-
 const express = require("express");
 const cors = require("cors");
-const pool = require("./config/db");
+const dotenv = require("dotenv");
+
+dotenv.config();
+
 const routeRoutes = require("./routes/routeRoutes");
 
 const app = express();
@@ -12,14 +11,18 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Route test
 app.get("/", (req, res) => {
-  res.json({ message: "IA Mobility backend running" });
+    res.json({ message: "IA Mobility backend running" });
 });
 
+// Routes API
 app.use("/api", routeRoutes);
 
+// ⚠️ PORT AVANT utilisation
 const PORT = process.env.PORT || 5000;
 
+// Lancer serveur
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });

@@ -6,10 +6,10 @@
             "server": "localhost",
             "port": 5432,
             "driver": "PostgreSQL",
-            "name": "PostgreSQL Local",
-            "database": "postgres",
+            "database": "ia_mobility",
             "username": "postgres",
-            "password": ""
+            "password": "Yacinehadil0306",
+            "name": "PostgreSQLIaMobility"
         }
     ]
 }

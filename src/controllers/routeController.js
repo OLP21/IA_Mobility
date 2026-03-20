@@ -2,6 +2,9 @@ const routeService = require("../services/routeService");
 const geocodeService = require("../services/geocodeService");
 const pool = require("../config/db");
 
+// ==========================
+// POST /api/route
+// ==========================
 exports.getRoute = async (req, res) => {
     try {
         const { origin, destination } = req.body;
@@ -15,6 +18,7 @@ exports.getRoute = async (req, res) => {
         let originCoords = origin;
         let destinationCoords = destination;
 
+        // Géocodage si texte
         if (typeof origin === "string") {
             originCoords = await geocodeService.getCoordinates(origin);
         }
@@ -23,29 +27,15 @@ exports.getRoute = async (req, res) => {
             destinationCoords = await geocodeService.getCoordinates(destination);
         }
 
-        console.log("originCoords =", originCoords);
-        console.log("destinationCoords =", destinationCoords);
+        // Calcul itinéraire
+        const routeData = await routeService.calculateRoute(
+            originCoords,
+            destinationCoords
+        );
 
-        if (
-            !Array.isArray(originCoords) ||
-            originCoords.length < 2 ||
-            !Array.isArray(destinationCoords) ||
-            destinationCoords.length < 2
-        ) {
-            return res.status(400).json({
-                error: "Format invalide pour originCoords ou destinationCoords",
-                originCoords,
-                destinationCoords
-            });
-        }
-
-        const routeData = await routeService.calculateRoute(originCoords, destinationCoords);
-
-        const originLng = originCoords[0];
-        const originLat = originCoords[1];
-        const destinationLng = destinationCoords[0];
-        const destinationLat = destinationCoords[1];
-
+        // ==========================
+        // INSERT route_requests
+        // ==========================
         const requestQuery = `
             INSERT INTO route_requests
             (origin_lat, origin_lng, destination_lat, destination_lng, route_summary)
@@ -54,16 +44,19 @@ exports.getRoute = async (req, res) => {
         `;
 
         const requestValues = [
-            originLat,
-            originLng,
-            destinationLat,
-            destinationLng,
+            originCoords[1], // lat
+            originCoords[0], // lng
+            destinationCoords[1],
+            destinationCoords[0],
             `Route from ${origin} to ${destination}`
         ];
 
         const requestResult = await pool.query(requestQuery, requestValues);
         const requestId = requestResult.rows[0].id;
 
+        // ==========================
+        // INSERT route_results
+        // ==========================
         const resultQuery = `
             INSERT INTO route_results
             (request_id, distance_meters, duration_seconds, geometry, weather_info)
@@ -81,6 +74,9 @@ exports.getRoute = async (req, res) => {
 
         const routeResult = await pool.query(resultQuery, resultValues);
 
+        // ==========================
+        // RESPONSE
+        // ==========================
         return res.status(201).json({
             message: "Route calculée et enregistrée",
             origin,
@@ -91,12 +87,55 @@ exports.getRoute = async (req, res) => {
             db_request: requestResult.rows[0],
             db_result: routeResult.rows[0]
         });
+
     } catch (error) {
         console.error("ERREUR CONTROLLER :", error.message);
 
         if (error.response) {
             console.error("DETAILS API :", error.response.data);
         }
+
+        return res.status(500).json({
+            error: "Erreur serveur",
+            details: error.response ? error.response.data : error.message
+        });
+    }
+};
+
+// ==========================
+// GET /api/routes
+// ==========================
+exports.getRoutesHistory = async (req, res) => {
+    try {
+        const query = `
+            SELECT
+                rr.id,
+                rr.origin_lat,
+                rr.origin_lng,
+                rr.destination_lat,
+                rr.destination_lng,
+                rr.route_summary,
+                rr.created_at,
+                rres.distance_meters,
+                rres.duration_seconds,
+                rres.weather_info
+            FROM route_requests rr
+            LEFT JOIN route_results rres
+                ON rr.id = rres.request_id
+            ORDER BY rr.created_at DESC
+            LIMIT 10;
+        `;
+
+        const result = await pool.query(query);
+
+        return res.status(200).json({
+            message: "Historique récupéré avec succès",
+            count: result.rows.length,
+            data: result.rows
+        });
+
+    } catch (error) {
+        console.error("ERREUR HISTORIQUE :", error.message);
 
         return res.status(500).json({
             error: "Erreur serveur",
