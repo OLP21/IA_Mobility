@@ -1,7 +1,7 @@
 const routeService = require("../services/routeService");
 const geocodeService = require("../services/geocodeService");
 const pool = require("../config/db");
-
+const weatherService = require("../services/weatherService");
 // ==========================
 // POST /api/route
 // ==========================
@@ -31,6 +31,11 @@ exports.getRoute = async (req, res) => {
         const routeData = await routeService.calculateRoute(
             originCoords,
             destinationCoords
+        );
+
+        const weather = await weatherService.getWeather(
+            originCoords[1],
+            originCoords[0]
         );
 
         // ==========================
@@ -69,7 +74,7 @@ exports.getRoute = async (req, res) => {
             Math.round(routeData.distance_meters),
             Math.round(routeData.duration_seconds),
             routeData.geometry,
-            JSON.stringify({})
+            JSON.stringify(weather)
         ];
 
         const routeResult = await pool.query(resultQuery, resultValues);
@@ -83,9 +88,12 @@ exports.getRoute = async (req, res) => {
             destination,
             originCoords,
             destinationCoords,
-            route: routeData,
-            db_request: requestResult.rows[0],
-            db_result: routeResult.rows[0]
+            route: {
+                distance_meters: routeData.distance_meters,
+                duration_seconds: routeData.duration_seconds
+            },
+            weather: weather,
+            request_id: requestId
         });
 
     } catch (error) {
