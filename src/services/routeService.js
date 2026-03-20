@@ -1,6 +1,6 @@
 const axios = require("axios");
 
-exports.calculateRoute = async (originCoords, destinationCoords) => {
+const calculateRoute = async (originCoords, destinationCoords) => {
     const apiKey = process.env.ORS_API_KEY;
 
     if (!apiKey) {
@@ -24,12 +24,10 @@ exports.calculateRoute = async (originCoords, destinationCoords) => {
         }
     );
 
-    console.log("ORS response data:", JSON.stringify(response.data, null, 2));
-
     const route = response.data.routes && response.data.routes[0];
 
     if (!route) {
-        throw new Error("Aucun itinéraire trouvé dans la réponse ORS");
+        throw new Error("Aucun itinéraire trouvé");
     }
 
     return {
@@ -38,3 +36,5 @@ exports.calculateRoute = async (originCoords, destinationCoords) => {
         geometry: route.geometry
     };
 };
+
+module.exports = { calculateRoute };
