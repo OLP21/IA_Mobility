@@ -10,7 +10,10 @@ router.post("/register", async (req, res) => {
   if (!email || !password) {
     return res.status(400).json({ error: "Champs manquants" })
   }
-
+  if (password.length < 8) {
+    return res.status(400).json({ error: "Mot de passe trop court (8 caractères min)" })
+  }
+  
   try {
     const hash = await argon2.hash(password)
 
