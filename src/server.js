@@ -1,28 +1,68 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const session = require("express-session");
 
 dotenv.config();
 
-const routeRoutes = require("./routes/routeRoutes");
-
 const app = express();
 
-app.use(cors());
+// =========================
+// IMPORT DES ROUTES
+// =========================
+const routeRoutes = require("./routes/routeRoutes");
+const authRoutes = require("./routes/auth");       // adapte si chemin différent
+const userRoutes = require("./routes/routes_user"); // adapte si chemin différent
+
+// =========================
+// MIDDLEWARES
+// =========================
+
+// JSON
 app.use(express.json());
 
-// Route test
+// CORS (frontend + credentials pour session)
+app.use(cors({
+    origin: "http://localhost:5173",
+    credentials: true
+}));
+
+// SESSION (important pour auth)
+app.use(session({
+    secret: process.env.SESSION_SECRET || "supersecret",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true
+    }
+}));
+
+// =========================
+// ROUTE TEST
+// =========================
 app.get("/", (req, res) => {
-    res.json({ message: "IA Mobility backend running" });
+    res.json({ message: "IA Mobility backend + Auth running" });
 });
 
-// Routes API
+// =========================
+// ROUTES API
+// =========================
+
+// IA Mobility
 app.use("/api", routeRoutes);
 
-// ⚠️ PORT AVANT utilisation
+// Auth
+app.use("/auth", authRoutes);
+
+// User
+app.use("/user", userRoutes);
+
+// =========================
+// SERVER
+// =========================
+
 const PORT = process.env.PORT || 5000;
 
-// Lancer serveur
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`Server running on http://localhost:${PORT}`);
 });
