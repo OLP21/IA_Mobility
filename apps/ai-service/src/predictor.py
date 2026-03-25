@@ -14,7 +14,7 @@ def entrainer_ia():
     print(f"--- Entraînement de l'IA sur {FICHIER_CLEAN} ---")
     
     if not os.path.exists(FICHIER_CLEAN):
-        print("❌ CSV introuvable. Lance processor.py d'abord.")
+        print("CSV introuvable. Lance processor.py d'abord.")
         return
 
     # 1. Chargement des données
