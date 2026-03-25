@@ -20,7 +20,7 @@ app.get("/", (req, res) => {
 app.use("/api", routeRoutes);
 
 // ⚠️ PORT AVANT utilisation
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 // Lancer serveur
 app.listen(PORT, () => {

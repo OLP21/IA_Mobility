@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  # La Base de Données (PostgreSQL)
+  db:
+    image: postgres:15-alpine
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      # Injection automatique de ton SQL au premier démarrage
+      - ./database/IA_Mobility.sql:/docker-entrypoint-initdb.d/IA_Mobility.sql
+      # Persistance des données sur ton Mac
+      - postgres_data:/var/lib/postgresql/data
+
+  # Ton application Node.js
+  backend:
+    build: .
+    container_name: node_backend
+    restart: on-failure
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - db
+    env_file:
+      - .env
+
+volumes:
+  postgres_data:

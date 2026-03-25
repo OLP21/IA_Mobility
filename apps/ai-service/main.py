@@ -1,10 +1,12 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 import joblib
 import pandas as pd
 import os
 from datetime import datetime
 
 app = Flask(__name__)
+CORS(app)
 
 # Chemins des modèles
 MODELE_PATH = os.path.join("models", "modele_parkings.pkl")
@@ -14,9 +16,9 @@ ENCODER_PATH = os.path.join("models", "encoder_noms.pkl")
 if os.path.exists(MODELE_PATH) and os.path.exists(ENCODER_PATH):
     model = joblib.load(MODELE_PATH)
     le = joblib.load(ENCODER_PATH)
-    print(f"✅ IA et Encodeur chargés (92 parkings prêts !)")
+    print(f"IA et Encodeur chargés (92 parkings prêts !)")
 else:
-    print("❌ ERREUR : Modèles introuvables. Lance predictor.py d'abord.")
+    print("ERREUR : Modèles introuvables. Lance predictor.py d'abord.")
 
 @app.route('/predict', methods=['GET'])
 def predict():
@@ -59,4 +61,4 @@ def predict():
 
 if __name__ == "__main__":
     # On lance l'API sur le port 5000
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5001, debug=True)

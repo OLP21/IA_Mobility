@@ -3,32 +3,37 @@ import json
 import time
 import os
 
-# Configuration
-CLE = "UFM1S7RTLN"  # Remplace par ta vraie clé quand tu l'auras
-# On ajoute un filtre pour ne prendre que les parkings qui sont 'LIBRE' (ouverts)
+# --- CONFIGURATION DES CHEMINS ---
+# On trouve le dossier 'ai-service' (racine du projet Python)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# On définit le chemin vers data/raw/
+FICHIER_DEST = os.path.join(BASE_DIR, "data", "raw", "historique_parkings.json")
+
+CLE = "UFM1S7RTLN" 
 URL = f"https://data.bordeaux-metropole.fr/geojson?key={CLE}&typename=st_park_p"
-FICHIER_DEST = "data/raw/historique_parkings.json"
 
 def collecter():
+    # 1. CRÉATION AUTO DES DOSSIERS (La sécurité)
+    os.makedirs(os.path.dirname(FICHIER_DEST), exist_ok=True)
+    
     try:
         response = requests.get(URL)
         if response.status_code == 200:
             data = response.json()
-            #TEST 
-           # print("STRUCTURE DU PREMIER PARKING :", data['features'][0]['properties'])
-            #TEST
             nb_recus = len(data.get('features', []))
             print(f"📡 L'API a envoyé {nb_recus} parkings.")
             
-            # On ajoute l'heure de la capture
             capture = {
                 "sauvegarde_le": time.strftime("%Y-%m-%d %H:%M:%S"),
                 "donnees": data['features']
             }
-            # On écrit dans le dossier data/raw
-            with open(FICHIER_DEST, "a") as f:
-                f.write(json.dumps(capture) + "\n")
-            print(f"[{capture['sauvegarde_le']}] Données enregistrées.")
+            
+            # 2. ÉCRITURE PROPRE (Correction de ta ligne f.write)
+            with open(FICHIER_DEST, "w") as f:
+                # Utilise json.dump directement, c'est plus simple
+                json.dump(capture, f, indent=4)
+                
+            print(f"[{capture['sauvegarde_le']}] Données enregistrées dans {FICHIER_DEST}")
         else:
             print(f"Erreur API : {response.status_code}")
     except Exception as e:
@@ -37,7 +42,5 @@ def collecter():
 if __name__ == "__main__":
     while True:
         collecter()
-        time.sleep(120) # Attend 2 minutes
-
-        
-
+        print("Attente de 2 minutes...")
+        time.sleep(120)
