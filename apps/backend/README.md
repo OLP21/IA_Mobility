@@ -110,5 +110,3 @@ Le backend gère désormais une architecture à **8 tables** pour une traçabili
 ---
 
 **Note** : Assurez-vous que Docker Desktop est lancé avant de démarrer le projet.
-
----

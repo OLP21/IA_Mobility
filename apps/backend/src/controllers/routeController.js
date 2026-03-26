@@ -37,13 +37,31 @@ exports.getRoute = async (req, res) => {
         );
         const endLocId = endLocRes.rows[0].id;
 
-        // 5. Créer le trajet dans 'trips' lié aux deux locations
+        // On récupère l'ID du user depuis la session (s'il est connecté, sinon null)
+        let userId = req.session && req.session.userId ? req.session.userId : null;
+
+        // Si la session référence un user supprimé, on neutralise le userId
+        // pour éviter une violation de clé étrangère sur trips.user_id.
+        if (userId) {
+            const userExistsRes = await pool.query(
+                "SELECT 1 FROM users WHERE id = $1 LIMIT 1",
+                [userId]
+            );
+
+            if (userExistsRes.rows.length === 0) {
+                userId = null;
+                if (req.session) {
+                    delete req.session.userId;
+                }
+            }
+        }
+
+        // 5. Créer le trajet dans 'trips' (avec le user_id)
         const tripRes = await pool.query(
-            "INSERT INTO trips (start_location_id, end_location_id, departure_time) VALUES ($1, $2, CURRENT_TIMESTAMP) RETURNING id",
-            [startLocId, endLocId]
+            "INSERT INTO trips (user_id, start_location_id, end_location_id, departure_time) VALUES ($1, $2, $3, CURRENT_TIMESTAMP) RETURNING id",
+            [userId, startLocId, endLocId] // On passe le userId en premier paramètre ($1)
         );
         const tripId = tripRes.rows[0].id;
-
         const analyzedRoutes = [];
 
         // 6. Analyser et insérer chaque variante de route
@@ -90,9 +108,16 @@ exports.getRoute = async (req, res) => {
     }
 };
 
-// GET /api/routes (Historique avec JOINTURES)
+// GET /api/routes (Historique personnel de l'utilisateur)
 exports.getRoutesHistory = async (req, res) => {
     try {
+        // Vérifie si l'utilisateur est bien connecté
+        if (!req.session || !req.session.userId) {
+             return res.status(401).json({ error: "Vous devez être connecté pour voir votre historique" });
+        }
+        
+        const userId = req.session.userId;
+
         const query = `
             SELECT 
                 t.id as trip_id,
@@ -106,10 +131,11 @@ exports.getRoutesHistory = async (req, res) => {
             JOIN locations loc_start ON t.start_location_id = loc_start.id
             JOIN locations loc_end ON t.end_location_id = loc_end.id
             JOIN optimized_routes opt ON t.id = opt.trip_id
+            WHERE t.user_id = $1 -- 👈 On filtre UNIQUEMENT les trajets de ce user
             ORDER BY t.departure_time DESC
             LIMIT 20;
         `;
-        const result = await pool.query(query);
+        const result = await pool.query(query, [userId]);
         return res.status(200).json({ count: result.rows.length, data: result.rows });
     } catch (error) {
         console.error("ERREUR HISTORIQUE :", error.message);
