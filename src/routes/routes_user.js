@@ -1,6 +1,7 @@
 const express = require("express");
 const { requireAuth } = require("../middleware");
 const db = require("../config/db");
+const tripAnalysisService = require("../services/tripAnalysisService");
 
 const router = express.Router();
 
@@ -34,34 +35,81 @@ router.get("/me", requireAuth, async (req, res) => {
 // Créer un trajet (avec option sauvegarde)
 router.post("/trips", requireAuth, async (req, res) => {
     try {
-        const { start, end, save } = req.body;
+        const { start, end, save, maxRoutes } = req.body;
 
         if (!start || !end) {
             return res.status(400).json({ error: "Départ et arrivée requis" });
         }
 
-        // mock temporaire en attendant l'IA
+        const tripData = await tripAnalysisService.analyzeTrip(
+            start,
+            end,
+            maxRoutes
+        );
+
+        if (!tripData.routes || tripData.routes.length === 0) {
+            return res.status(404).json({ error: "Aucun trajet trouvé" });
+        }
+
+        const bestRoute = tripData.routes[0];
+
         const trip = {
             start,
             end,
-            duration: Math.floor(Math.random() * 60) + 10
+            originCoords: tripData.originCoords,
+            destinationCoords: tripData.destinationCoords,
+            weather: tripData.weather,
+            distance: Math.round(bestRoute.distance_meters),
+            duration: Math.round(bestRoute.duration_seconds),
+            score: bestRoute.analysis.score,
+            risk_level: bestRoute.analysis.risk_level,
+            routes_count: tripData.routes_count,
+            routes: tripData.routes
         };
 
-        // Sauvegarde optionnelle
         if (save) {
             await db.query(
-                "INSERT INTO trips (user_id, start_location, end_location, duration) VALUES ($1, $2, $3, $4)",
-                [req.session.userId, start, end, trip.duration]
+                `INSERT INTO trips (
+                    user_id,
+                    start_location,
+                    end_location,
+                    duration,
+                    distance,
+                    score,
+                    risk_level,
+                    weather_info,
+                    origin_lat,
+                    origin_lng,
+                    destination_lat,
+                    destination_lng
+                ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
+                [
+                    req.session.userId,
+                    start,
+                    end,
+                    trip.duration,
+                    trip.distance,
+                    trip.score,
+                    trip.risk_level,
+                    JSON.stringify(trip.weather),
+                    trip.originCoords[1],
+                    trip.originCoords[0],
+                    trip.destinationCoords[1],
+                    trip.destinationCoords[0]
+                ]
             );
         }
 
         res.json({
-            message: save ? "Trajet sauvegardé" : "Trajet calculé sans sauvegarde",
+            message: save ? "Trajet IA sauvegardé" : "Trajet IA calculé",
             trip
         });
     } catch (err) {
-        console.error("CREATE TRIP ERROR:", err);
-        res.status(500).json({ error: "Erreur création trajet" });
+        console.error("CREATE TRIP ERROR:", err.message);
+        res.status(500).json({
+            error: "Erreur création trajet",
+            details: err.message
+        });
     }
 });
 
@@ -69,11 +117,44 @@ router.post("/trips", requireAuth, async (req, res) => {
 router.get("/trips", requireAuth, async (req, res) => {
     try {
         const result = await db.query(
-            "SELECT * FROM trips WHERE user_id = $1 ORDER BY created_at DESC",
+            `SELECT
+                id,
+                start_location,
+                end_location,
+                duration,
+                distance,
+                score,
+                risk_level,
+                weather_info,
+                origin_lat,
+                origin_lng,
+                destination_lat,
+                destination_lng,
+                created_at
+             FROM trips
+             WHERE user_id = $1
+             ORDER BY created_at DESC`,
             [req.session.userId]
         );
 
-        res.json(result.rows);
+        const trips = result.rows.map((trip) => ({
+            id: trip.id,
+            start: trip.start_location,
+            end: trip.end_location,
+            duration: trip.duration,
+            distance: trip.distance,
+            score: trip.score,
+            risk_level: trip.risk_level,
+            weather: trip.weather_info,
+            originCoords: [trip.origin_lng, trip.origin_lat],
+            destinationCoords: [trip.destination_lng, trip.destination_lat],
+            created_at: trip.created_at
+        }));
+
+        res.json({
+            count: trips.length,
+            trips
+        });
     } catch (err) {
         console.error("GET TRIPS ERROR:", err);
         res.status(500).json({ error: "Erreur récupération trajets" });

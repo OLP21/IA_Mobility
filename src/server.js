@@ -5,14 +5,18 @@ const session = require("express-session");
 
 dotenv.config();
 
+if (!process.env.SESSION_SECRET) {
+    throw new Error("SESSION_SECRET manquant dans le fichier .env");
+}
+
 const app = express();
 
 // =========================
 // IMPORT DES ROUTES
 // =========================
 const routeRoutes = require("./routes/routeRoutes");
-const authRoutes = require("./routes/auth");       // adapte si chemin différent
-const userRoutes = require("./routes/routes_user"); // adapte si chemin différent
+const authRoutes = require("./routes/auth");
+const userRoutes = require("./routes/routes_user");
 
 // =========================
 // MIDDLEWARES
@@ -21,15 +25,15 @@ const userRoutes = require("./routes/routes_user"); // adapte si chemin différe
 // JSON
 app.use(express.json());
 
-// CORS (frontend + credentials pour session)
+// CORS
 app.use(cors({
     origin: "http://localhost:5173",
     credentials: true
 }));
 
-// SESSION (important pour auth)
+// SESSION
 app.use(session({
-    secret: process.env.SESSION_SECRET || "supersecret",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -47,20 +51,13 @@ app.get("/", (req, res) => {
 // =========================
 // ROUTES API
 // =========================
-
-// IA Mobility
 app.use("/api", routeRoutes);
-
-// Auth
 app.use("/auth", authRoutes);
-
-// User
 app.use("/user", userRoutes);
 
 // =========================
 // SERVER
 // =========================
-
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {

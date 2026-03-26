@@ -1,6 +1,7 @@
 const routeService = require("./routeService");
 const geocodeService = require("./geocodeService");
 const weatherService = require("./weatherService");
+const trafficService = require("./trafficService");
 const aiService = require("./aiService");
 
 function roundCoord(value, decimals = 4) {
@@ -10,13 +11,14 @@ function roundCoord(value, decimals = 4) {
 function simplifyAndRound(coords, step = 10) {
     return coords
         .filter((_, index) => index % step === 0)
-        .map(coord => [
+        .map((coord) => [
             roundCoord(coord[0]),
             roundCoord(coord[1])
         ]);
 }
+
 async function analyzeTrip(origin, destination, maxRoutes = 3) {
-    const requestedMaxRoutes = Math.min(Math.max(parseInt(maxRoutes) || 3, 1), 5);
+    const requestedMaxRoutes = Math.min(Math.max(parseInt(maxRoutes, 10) || 3, 1), 5);
 
     if (!origin || !destination) {
         throw new Error("origin et destination sont obligatoires");
@@ -33,7 +35,23 @@ async function analyzeTrip(origin, destination, maxRoutes = 3) {
         destinationCoords = await geocodeService.getCoordinates(destination);
     }
 
+    if (
+        !originCoords ||
+        !destinationCoords ||
+        !Array.isArray(originCoords) ||
+        !Array.isArray(destinationCoords) ||
+        originCoords.length < 2 ||
+        destinationCoords.length < 2
+    ) {
+        throw new Error("Coordonnées invalides pour l'origine ou la destination");
+    }
+
     const weather = await weatherService.getWeather(
+        originCoords[1],
+        originCoords[0]
+    );
+
+    const traffic = await trafficService.getTraffic(
         originCoords[1],
         originCoords[0]
     );
@@ -45,7 +63,7 @@ async function analyzeTrip(origin, destination, maxRoutes = 3) {
     );
 
     const analyzedRoutes = routesData.map((routeData) => {
-        const analysis = aiService.analyzeRoute(routeData, weather);
+        const analysis = aiService.analyzeRoute(routeData, weather, traffic);
 
         return {
             route_index: routeData.route_index,
@@ -54,7 +72,8 @@ async function analyzeTrip(origin, destination, maxRoutes = 3) {
             geometry: {
                 coordinates: simplifyAndRound(routeData.geometry.coordinates, 10)
             },
-            analysis
+            analysis,
+            traffic
         };
     });
 
@@ -66,6 +85,7 @@ async function analyzeTrip(origin, destination, maxRoutes = 3) {
         originCoords,
         destinationCoords,
         weather,
+        traffic,
         routes_count: analyzedRoutes.length,
         requested_max_routes: requestedMaxRoutes,
         routes: analyzedRoutes
