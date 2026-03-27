@@ -6,7 +6,7 @@ interface AuthProps {
 
 export default function Auth({ onLoginSuccess }: AuthProps) {
   const [isLogin, setIsLogin] = useState(true);
-  const [formData, setFormData] = useState({ email: '', password: '', name: '' });
+  const [formData, setFormData] = useState({ email: '', password: '', firstname: '', lastname: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -60,19 +60,30 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
             Le bouton submit est un enfant direct du form, pas du inputGroup. */}
         <form onSubmit={handleSubmit} style={styles.form}>
           {!isLogin && (
-            <div style={styles.field}>
-              <label style={styles.label}>Nom complet</label>
-              {/* BUG FIX 2 : ajout de value= pour en faire un input contrôlé,
-                  ce qui garantit que React gère bien l'état affiché. */}
-              <input
-                type="text"
-                placeholder="Jean Dupont"
-                required
-                value={formData.name}
-                onChange={e => setFormData({ ...formData, name: e.target.value })}
-                style={styles.input}
-              />
-            </div>
+            <>
+              <div style={styles.field}>
+                <label style={styles.label}>Prénom</label>
+                <input
+                  type="text"
+                  placeholder="Jean"
+                  required
+                  value={formData.firstname}
+                  onChange={e => setFormData({ ...formData, firstname: e.target.value })}
+                  style={styles.input}
+                />
+              </div>
+              <div style={styles.field}>
+                <label style={styles.label}>Nom de famille</label>
+                <input
+                  type="text"
+                  placeholder="Dupont"
+                  required
+                  value={formData.lastname}
+                  onChange={e => setFormData({ ...formData, lastname: e.target.value })}
+                  style={styles.input}
+                />
+              </div>
+            </>
           )}
 
           <div style={styles.field}>
@@ -122,13 +133,13 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
 
 const styles: { [key: string]: React.CSSProperties } = {
   container: {
-    display: 'flex', justifyContent: 'center', alignItems: 'center',
-    height: '100vh', background: '#f7f7f5',
+    display: 'flex', justifyContent: 'center', alignItems: 'center'
   },
   card: {
     background: 'white', padding: '2.5rem 2rem',
-    borderRadius: '12px', border: '1px solid #e8e8e4',
-    width: '360px', boxSizing: 'border-box',
+    borderRadius: '16px', border: '1px solid #e8e8e4',
+    width: '380px', boxSizing: 'border-box',
+    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
   },
   header: { marginBottom: '1.75rem' },
   title: { margin: '0 0 4px', fontSize: '22px', fontWeight: 500, color: '#111' },

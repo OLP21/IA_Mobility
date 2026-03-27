@@ -12,7 +12,8 @@ CREATE TABLE users (
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255),
     google_id VARCHAR(255),
-    name VARCHAR(100),
+    lastname VARCHAR(100),
+    firstname VARCHAR(100),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -37,6 +38,8 @@ CREATE TABLE trips (
     start_location_id INT,
     end_location_id INT,
     departure_time TIMESTAMP,
+    status VARCHAR(20) DEFAULT 'searched',
+    chosen_route_id INT REFERENCES optimized_routes(id),
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (start_location_id) REFERENCES locations(id),
     FOREIGN KEY (end_location_id) REFERENCES locations(id)
@@ -55,7 +58,7 @@ CREATE TABLE optimized_routes (
 
 CREATE TABLE parkings (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    name VARCHAR(255),
+    name VARCHAR(255) UNIQUE,
     address VARCHAR(255),
     latitude DOUBLE PRECISION,
     longitude DOUBLE PRECISION,

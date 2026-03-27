@@ -12,8 +12,9 @@ exports.getCoordinates = async (placeName) => {
         {
             params: {
                 api_key: apiKey,
-                text: placeName,
-                size: 1
+                text: placeName.toLowerCase().includes("gironde") ? placeName : `${placeName}, Gironde, France`,
+                size: 1,
+                "boundary.country": "FR"
             }
         }
     );

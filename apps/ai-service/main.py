@@ -4,6 +4,7 @@ import joblib
 import pandas as pd
 import os
 from datetime import datetime
+from src.database import get_connection
 
 app = Flask(__name__)
 CORS(app)
@@ -42,7 +43,31 @@ def predict():
         # 3. Prédiction
         input_data = pd.DataFrame([[nom_encoded, heure, jour, minute]], 
                                  columns=['nom_encoded', 'heure', 'jour_semaine', 'minute'])
-        prediction = model.predict(input_data)[0]
+        prediction = float(model.predict(input_data)[0])
+
+        # --- 4. Archivage dans PostgreSQL ---
+        try:
+            conn = get_connection()
+            cur = conn.cursor()
+            # Récupérer l'ID officiel du parking créé par processor.py
+            cur.execute("SELECT id FROM parkings WHERE name = %s LIMIT 1", (nom_parking,))
+            row = cur.fetchone()
+            
+            if row:
+                parking_id = row[0]
+                confidence_score = 85.0 # Score de confiance heuristique ou IA
+                query = """
+                    INSERT INTO parking_predictions 
+                    (parking_id, predicted_available_spots, confidence, prediction_time)
+                    VALUES (%s, %s, %s, NOW());
+                """
+                cur.execute(query, (parking_id, prediction, confidence_score))
+                conn.commit()
+                
+            cur.close()
+            conn.close()
+        except Exception as db_err:
+            print(f"⚠️ Insertion BDD ignorée (non bloquant) : {db_err}")
 
         return jsonify({
             "parking": nom_parking,

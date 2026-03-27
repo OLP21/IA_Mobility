@@ -7,7 +7,7 @@ const router = express.Router();
 
 // REGISTER
 router.post("/register", async (req, res) => {
-    const { email, password, name } = req.body;
+    const { email, password, firstname, lastname } = req.body;
 
     if (!email || !password) {
         return res.status(400).json({ error: "Champs manquants" });
@@ -33,8 +33,8 @@ router.post("/register", async (req, res) => {
         const hash = await argon2.hash(password);
 
         await db.query(
-            "INSERT INTO users (email, password, name) VALUES ($1, $2, $3)",
-            [email, hash, name || null]
+            "INSERT INTO users (email, password, firstname, lastname) VALUES ($1, $2, $3, $4)",
+            [email, hash, firstname || null, lastname || null]
         );
 
         res.status(201).json({ message: "User created" });
@@ -76,7 +76,8 @@ router.post("/login", async (req, res) => {
             user: {
                 id: user.id,
                 email: user.email,
-                name: user.name
+                firstname: user.firstname,
+                lastname: user.lastname
             }
         });
     } catch (err) {

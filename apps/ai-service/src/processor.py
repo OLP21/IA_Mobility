@@ -1,6 +1,14 @@
 import pandas as pd
 import json
 import os
+import sys
+
+# Set path so we can import src.database
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+try:
+    from src.database import get_connection
+except ImportError:
+    pass # Permet de fonctionner même sans BDD si lancé de la racine
 
 # Chemins des fichiers
 
@@ -24,53 +32,84 @@ def transformer_donnees():
     all_rows = []
     
     # 3. Lecture et extraction des données
-    with open(FICHIER_RAW, "r") as f:
-        for i, line in enumerate(f):
-            if not line.strip(): 
-                continue 
+    try:
+        with open(FICHIER_RAW, "r") as f:
+            capture = json.load(f)
             
+        date_capture = pd.to_datetime(capture.get("sauvegarde_le"))
+        
+        # --- Connexion BDD pour insérer les parkings statiques ---
+        conn = None
+        cur = None
+        try:
+            conn = get_connection()
+            cur = conn.cursor()
+            db_active = True
+        except Exception as e:
+            print(f"⚠️ BDD indisponible, on continue sans SQL : {e}")
+            db_active = False
+
+        if db_active:
             try:
-                capture = json.loads(line)
-                date_capture = pd.to_datetime(capture["sauvegarde_le"])
+                cur.execute("ALTER TABLE parkings ADD CONSTRAINT parkings_name_key UNIQUE (name);")
+                conn.commit()
+            except Exception:
+                conn.rollback() # It already exists
+            
+        # --- TON BLOC DE CODE INTÉGRÉ ICI ---
+        for parking in capture.get("donnees", []):
+            prop = parking.get("properties", {})
+            nom = prop.get("nom", "Inconnu")
+                    
+            # On teste avec des valeurs par défaut précises
+            total = prop.get("total")
+            if total is None: total = prop.get("np_total")
+            if total is None: total = prop.get("np_global")
+            
+            libres = prop.get("libres")
+            if libres is None: libres = prop.get("nb_places_disponibles")
+
+            # --- LE TEST DE VERITE ---
+            if total is not None and total > 0:
+                # Si on a un total mais pas de "libres", on met 0 au lieu de rien
+                libres_clean = libres if libres is not None else 0
+                occ_pct = (total - libres_clean) / total * 100
                 
-                # --- TON BLOC DE CODE INTÉGRÉ ICI ---
-                for parking in capture["donnees"]:
-                    prop = parking["properties"]
-                    nom = prop.get("nom", "Inconnu")
+                # => INSERTION BDD (Parkings statiques)
+                if db_active:
+                    lat = parking.get("geometry", {}).get("coordinates", [0, 0])[1]
+                    lon = parking.get("geometry", {}).get("coordinates", [0, 0])[0]
+                    adresse = prop.get("adresse", prop.get("adresse", "Pas d'adresse"))
                     
-                    # On teste avec des valeurs par défaut précises
-                    total = prop.get("total")
-                    if total is None: total = prop.get("np_total")
-                    if total is None: total = prop.get("np_global")
+                    query = """
+                        INSERT INTO parkings (name, address, latitude, longitude, capacity, available_spots)
+                        VALUES (%s, %s, %s, %s, %s, %s)
+                        ON CONFLICT (name) DO UPDATE SET available_spots = EXCLUDED.available_spots;
+                    """
+                    cur.execute(query, (nom, adresse, lat, lon, total, libres_clean))
                     
-                    libres = prop.get("libres")
-                    if libres is None: libres = prop.get("nb_places_disponibles")
+                # => APPEND AU CSV
+                all_rows.append({
+                    "nom": nom,
+                    "total": total,
+                    "libres": libres_clean,
+                    "occupation_pct": round(occ_pct, 2),
+                    "heure": date_capture.hour,
+                    "jour_semaine": date_capture.dayofweek,
+                    "minute": date_capture.minute
+                })
+            else:
+                pass # Silently ignore invalid lots for clean console
 
-                    # --- LE TEST DE VERITE ---
-                    if total is not None and total > 0:
-                        # Si on a un total mais pas de "libres", on met 0 au lieu de rien
-                        libres_clean = libres if libres is not None else 0
-                        occ_pct = (total - libres_clean) / total * 100
-                        
-                        all_rows.append({
-                            "nom": nom,
-                            "total": total,
-                            "libres": libres_clean,
-                            "occupation_pct": round(occ_pct, 2),
-                            "heure": date_capture.hour,
-                            "jour_semaine": date_capture.dayofweek,
-                            "minute": date_capture.minute
-                        })
-                    else:
-                        # Diagnostic pour comprendre pourquoi on n'en a que 4
-                        if i == 0: # On affiche seulement pour la première capture
-                            print(f"🔍 Parking ignoré: {nom} | total={total} | libres={libres}")
-                # --------------------------------------
+        if db_active:
+            conn.commit()
+            cur.close()
+            conn.close()
 
-            except Exception as e:
-                print(f"⚠️ Erreur à la ligne {i+1} : {e}")
+    except Exception as e:
+        print(f"⚠️ Erreur de lecture JSON global : {e}")
 
-    # 4. Conversion et sauvegarde
+
     if all_rows:
         df = pd.DataFrame(all_rows)
         # Supprime les doublons si on a collecté plusieurs fois les mêmes données

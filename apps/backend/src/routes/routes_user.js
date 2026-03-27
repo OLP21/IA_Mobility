@@ -65,11 +65,62 @@ router.post("/trips", requireAuth, async (req, res) => {
     }
 });
 
+// Mettre à jour le statut d'un trajet (choisir, en cours, terminé)
+router.put("/trips/:id/status", requireAuth, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status, chosen_route_id } = req.body;
+
+        if (!status) {
+            return res.status(400).json({ error: "Statut requis" });
+        }
+
+        const validStatuses = ['searched', 'en_cours', 'termine', 'annule'];
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({ error: "Statut invalide" });
+        }
+
+        const query = `
+            UPDATE trips 
+            SET status = $1, 
+                chosen_route_id = COALESCE($2, chosen_route_id) 
+            WHERE id = $3 AND user_id = $4 
+            RETURNING id, status, chosen_route_id
+        `;
+        
+        const result = await db.query(query, [status, chosen_route_id || null, id, req.session.userId]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: "Trajet introuvable" });
+        }
+
+        res.json({ message: "Statut mis à jour", trip: result.rows[0] });
+    } catch (err) {
+        console.error("UPDATE STATUS ERROR:", err);
+        res.status(500).json({ error: "Erreur mise à jour statut" });
+    }
+});
+
 // Voir tous ses trajets
 router.get("/trips", requireAuth, async (req, res) => {
     try {
         const result = await db.query(
-            "SELECT * FROM trips WHERE user_id = $1 ORDER BY created_at DESC",
+            `SELECT 
+                t.id, 
+                t.departure_time AS created_at,
+                t.status,
+                t.chosen_route_id,
+                l1.address AS start_location,
+                l2.address AS end_location,
+                o.duration,
+                o.distance,
+                o.score
+            FROM trips t
+            JOIN locations l1 ON t.start_location_id = l1.id
+            JOIN locations l2 ON t.end_location_id = l2.id
+            LEFT JOIN optimized_routes o ON o.id = t.chosen_route_id
+            WHERE t.user_id = $1 AND t.status IN ('en_cours', 'termine')
+            ORDER BY t.departure_time DESC`,
             [req.session.userId]
         );
 

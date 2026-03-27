@@ -1,6 +1,7 @@
 const routeService = require("../services/routeService");
 const geocodeService = require("../services/geocodeService");
 const weatherService = require("../services/weatherService");
+const trafficService = require("../services/trafficService");
 const aiService = require("../services/aiService");
 const pool = require("../config/db");
 
@@ -18,8 +19,9 @@ exports.getRoute = async (req, res) => {
         const originCoords = typeof origin === "string" ? await geocodeService.getCoordinates(origin) : origin;
         const destinationCoords = typeof destination === "string" ? await geocodeService.getCoordinates(destination) : destination;
 
-        // 2. Services externes (Météo et Itinéraires)
+        // 2. Services externes (Météo, Trafic et Itinéraires)
         const weather = await weatherService.getWeather(originCoords[1], originCoords[0]);
+        const traffic = await trafficService.getTraffic(originCoords[1], originCoords[0]);
         const routesData = await routeService.calculateRoutes(originCoords, destinationCoords, requestedMaxRoutes);
 
         // --- DEBUT TRANSACTION SQL ---
@@ -66,7 +68,7 @@ exports.getRoute = async (req, res) => {
 
         // 6. Analyser et insérer chaque variante de route
         for (const routeData of routesData) {
-            const analysis = aiService.analyzeRoute(routeData, weather);
+            const analysis = aiService.analyzeRoute(routeData, weather, traffic);
 
             const routeQuery = `
                 INSERT INTO optimized_routes (trip_id, duration, distance, traffic_level, weather_condition, score)
@@ -88,22 +90,42 @@ exports.getRoute = async (req, res) => {
             analyzedRoutes.push({
                 result_id: routeResult.rows[0].id,
                 route_index: routeData.route_index,
-                analysis
+                analysis,
+                distance: routeData.distance_meters,
+                duration: routeData.duration_seconds,
+                geometry: routeData.geometry
             });
+        }
+
+        // --- 7. Insérer le contexte environnemental dans 'external_data' ---
+        try {
+            const primaryTrafficLevel = traffic ? traffic.congestion_level : (analyzedRoutes.length > 0 ? analyzedRoutes[0].analysis.risk_level : 'medium');
+            await pool.query(
+                `INSERT INTO external_data (location_id, traffic_level, weather, temperature, recorded_at)
+                 VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP)`,
+                [startLocId, primaryTrafficLevel, weather.description, weather.temperature]
+            );
+        } catch (extError) {
+            console.warn("⚠️ Impossible de remplir external_data (non bloquant) :", extError.message);
         }
 
         // À la fin de ton bloc try dans routeController.js
         return res.status(201).json({
             message: "Trajet et lieux enregistrés avec succès",
             trip_id: tripId,
-            originCoords: originCoords,       // <--- AJOUTE CETTE LIGNE
-            destinationCoords: destinationCoords, // <--- AJOUTE CETTE LIGNE
+            originCoords: originCoords,       
+            destinationCoords: destinationCoords, 
             weather: weather,
+            traffic: traffic,
             routes: analyzedRoutes
         });
 
     } catch (error) {
-        console.error("ERREUR SQL :", error.message);
+        if (error.response) {
+            console.error("API Error Response Data:", error.response.data);
+            return res.status(error.response.status || 500).json({ error: "Erreur API tierce", details: error.response.data });
+        }
+        console.error("ERREUR :", error.message);
         return res.status(500).json({ error: "Erreur serveur", details: error.message });
     }
 };
@@ -111,7 +133,7 @@ exports.getRoute = async (req, res) => {
 // GET /api/routes (Historique personnel de l'utilisateur)
 exports.getRoutesHistory = async (req, res) => {
     try {
-        // Vérifie si l'utilisateur est bien connecté
+        // Vérif connexion utilisateur
         if (!req.session || !req.session.userId) {
              return res.status(401).json({ error: "Vous devez être connecté pour voir votre historique" });
         }
