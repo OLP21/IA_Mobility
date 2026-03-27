@@ -9,6 +9,8 @@ const router = express.Router();
 router.post("/register", async (req, res) => {
     const { email, password, firstname, lastname } = req.body;
 
+    const capitalize = (str) => str ? str.trim().charAt(0).toUpperCase() + str.trim().slice(1).toLowerCase() : null;
+
     if (!email || !password) {
         return res.status(400).json({ error: "Champs manquants" });
     }
@@ -34,7 +36,7 @@ router.post("/register", async (req, res) => {
 
         await db.query(
             "INSERT INTO users (email, password, firstname, lastname) VALUES ($1, $2, $3, $4)",
-            [email, hash, firstname || null, lastname || null]
+            [email, hash, capitalize(firstname), capitalize(lastname)]
         );
 
         res.status(201).json({ message: "User created" });

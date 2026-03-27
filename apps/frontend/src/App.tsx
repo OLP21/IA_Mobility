@@ -4,6 +4,7 @@ import Map from './components/Map';
 import Auth from './components/Auth';
 import RouteDetails from './components/RouteDetails';
 import TripHistory from './components/TripHistory';
+import Footer from './components/Footer';
 import parkingData from './data/historique_parkings.json';
 
 const haversineDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
@@ -160,6 +161,20 @@ export default function App() {
     setSearch("");
   };
 
+  const handleDeleteAccount = async () => {
+    if (!window.confirm('Supprimer définitivement votre compte ? Cette action est irréversible.')) return;
+    try {
+      const res = await fetch('http://localhost:3000/user/delete', { method: 'DELETE', credentials: 'include' });
+      if (res.ok) {
+        setUser(null);
+        handleCloseTrip();
+        alert('Compte supprimé.');
+      }
+    } catch (err) {
+      console.error('Delete account error', err);
+    }
+  };
+
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!origin || !search) return;
@@ -212,6 +227,7 @@ export default function App() {
         user={user} setUser={setUser} setShowAuth={setShowAuth} setShowHistory={setShowHistory}
         origin={origin} setOrigin={setOrigin} search={search} setSearch={setSearch}
         handleSearch={handleSearch} setUserCoords={setUserCoords}
+        onDeleteAccount={handleDeleteAccount}
       />
 
       {/* 2. LA CARTE EN DESSOUS */}
@@ -250,6 +266,9 @@ export default function App() {
 
       {/* 5. HISTORIQUE DES TRAJETS */}
       <TripHistory isOpen={showHistory} onClose={() => setShowHistory(false)} />
+
+      {/* 6. FOOTER */}
+      <Footer />
 
     </div>
   );

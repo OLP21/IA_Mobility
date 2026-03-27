@@ -2,14 +2,13 @@
   position: absolute;
   bottom: 0;
   left: 0;
-  right: 0;
   z-index: 1000;
   pointer-events: none;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: flex-end;
-  padding: 24px;
-  animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  padding: 20px 20px 60px 20px;
+  animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes slideUp {
@@ -19,16 +18,16 @@
 
 .route-details-panel {
   pointer-events: auto;
-  background: rgba(20, 25, 35, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(20, 25, 35, 0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-  width: 100%;
-  max-width: 600px;
+  width: 380px;
+  max-width: calc(100vw - 40px);
   color: white;
-  padding: 24px;
+  padding: 18px 20px;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 

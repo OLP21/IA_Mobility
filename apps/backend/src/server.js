@@ -1,8 +1,9 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
-const session = require("express-session"); // Juste ça !
-const pool = require("./config/db"); 
+const session = require("express-session");
+const pgSession = require("connect-pg-simple")(session);
+const pool = require("./config/db");
 
 dotenv.config();
 
@@ -23,13 +24,18 @@ app.use(cors({
     credentials: true
 }));
 
-// SESSION (En mémoire vive, simple et efficace)
+// SESSION (stockée en PostgreSQL pour persister les refresh et redémarrages)
 app.use(session({
+    store: new pgSession({
+        pool,               // réutilise le pool PG existant
+        tableName: 'session'
+    }),
     secret: process.env.SESSION_SECRET || "supersecret",
     resave: false,
     saveUninitialized: false,
     cookie: {
-        httpOnly: true
+        httpOnly: true,
+        maxAge: 7 * 24 * 60 * 60 * 1000  // 7 jours
     }
 }));
 

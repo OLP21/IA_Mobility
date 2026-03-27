@@ -40,7 +40,7 @@ CREATE TABLE trips (
     departure_time TIMESTAMP,
     status VARCHAR(20) DEFAULT 'searched',
     chosen_route_id INT REFERENCES optimized_routes(id),
-    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (start_location_id) REFERENCES locations(id),
     FOREIGN KEY (end_location_id) REFERENCES locations(id)
 );

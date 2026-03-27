@@ -12,7 +12,7 @@ const router = express.Router();
 router.get("/me", requireAuth, async (req, res) => {
     try {
         const result = await db.query(
-            "SELECT id, email, name, created_at FROM users WHERE id = $1",
+            "SELECT id, email, firstname, lastname, created_at FROM users WHERE id = $1",
             [req.session.userId]
         );
 
@@ -131,7 +131,22 @@ router.get("/trips", requireAuth, async (req, res) => {
     }
 });
 
-// Supprimer un trajet
+// Effacer tout l'historique (RGPD - droit à l'oubli partiel)
+// DOIT être avant /trips/:id sinon Express traite "all" comme un id
+router.delete("/trips/all", requireAuth, async (req, res) => {
+    try {
+        await db.query(
+            "DELETE FROM trips WHERE user_id = $1",
+            [req.session.userId]
+        );
+        res.json({ message: "Historique effacé" });
+    } catch (err) {
+        console.error("CLEAR HISTORY ERROR:", err);
+        res.status(500).json({ error: "Erreur suppression historique" });
+    }
+});
+
+// Supprimer un trajet individuel
 router.delete("/trips/:id", requireAuth, async (req, res) => {
     try {
         const { id } = req.params;

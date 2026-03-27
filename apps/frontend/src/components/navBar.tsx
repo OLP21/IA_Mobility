@@ -1,10 +1,18 @@
 import { useState } from 'react';
-import { Search, LogOut, History, User, MapPin, ArrowRightLeft } from 'lucide-react';
+import { Search, LogOut, History, User, MapPin, ArrowRightLeft, Trash2, Download, UserX } from 'lucide-react';
 
 export default function Navbar({ 
-  user, setUser, setShowAuth, setShowHistory, origin, setOrigin, search, setSearch, handleSearch, setUserCoords
+  user, setUser, setShowAuth, setShowHistory, origin, setOrigin, search, setSearch, handleSearch, setUserCoords, onDeleteAccount
 }: any) {
   const [showDropdown, setShowDropdown] = useState(false);
+
+  const handleHistoryClick = () => {
+    if (user) {
+      setShowHistory && setShowHistory(true);
+    } else {
+      setShowAuth && setShowAuth(true);
+    }
+  };
 
   const handleGeolocation = () => {
     if (navigator.geolocation) {
@@ -43,6 +51,44 @@ export default function Navbar({
     }
   };
 
+  const handleClearHistory = async () => {
+    if (!window.confirm('Effacer tout votre historique de trajets ? Cette action est irréversible.')) return;
+    try {
+      const res = await fetch('http://localhost:3000/user/trips/all', { method: 'DELETE', credentials: 'include' });
+      if (res.ok) {
+        alert('Historique effacé.');
+        setShowDropdown(false);
+      }
+    } catch (err) {
+      console.error('Clear history error', err);
+    }
+  };
+
+  const handleExportData = async () => {
+    try {
+      const res = await fetch('http://localhost:3000/user/trips', { credentials: 'include' });
+      const data = await res.json();
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ia-mobility-data-${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      setShowDropdown(false);
+    } catch (err) {
+      console.error('Export error', err);
+    }
+  };
+
+  const close = () => setShowDropdown(false);
+  const btnStyle = (color = '#333') => ({
+    display: 'flex', alignItems: 'center', gap: '10px',
+    padding: '11px 20px', background: 'transparent', border: 'none',
+    width: '100%', textAlign: 'left' as const, cursor: 'pointer', color,
+    fontSize: '13.5px', transition: 'background 0.15s'
+  });
+
   return (
     <div style={{
       position: 'absolute',
@@ -50,7 +96,7 @@ export default function Navbar({
       left: '50%', 
       transform: 'translateX(-50%)',
       width: '90%',
-      maxWidth: '900px',
+      maxWidth: '1100px',
       height: '75px',
       zIndex: 1000,
       display: 'flex',
@@ -65,8 +111,25 @@ export default function Navbar({
       boxSizing: 'border-box'
     }}>
       
-      {/* GAUCHE : ESPACE VIDE POUR CENTRER */}
-      <div style={{ flex: 1 }}></div>
+      {/* GAUCHE : HISTORIQUE — toujours visible */}
+      <div style={{ flex: 1, paddingRight: '12px' }}>
+        <button
+          onClick={handleHistoryClick}
+          title={user ? 'Mes trajets' : 'Connectez-vous pour voir vos trajets'}
+          style={{
+            display: 'flex', alignItems: 'center', gap: '6px',
+            padding: '8px 14px', background: 'transparent',
+            border: '1px solid #e0e0e0', borderRadius: '20px',
+            cursor: 'pointer', color: user ? '#2c3e50' : '#aaa', fontSize: '13px', fontWeight: 500,
+            transition: 'background 0.2s'
+          }}
+          onMouseEnter={e => e.currentTarget.style.background = '#f5f5f5'}
+          onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+        >
+          <History size={15} />
+          Mes trajets
+        </button>
+      </div>
 
       {/* CENTRE : FORMULAIRE */}
       <form onSubmit={handleSearch} style={{ flex: 1, display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center' }}>
@@ -118,40 +181,67 @@ export default function Navbar({
         </button>
       </form>
 
-      {/* DROITE : AUTHENTIFICATION */}
+      {/* DROITE : COMPTE */}
       <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
         {user ? (
           <div style={{ position: 'relative' }}>
             <button 
               onClick={() => setShowDropdown(!showDropdown)}
-              style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 15px', background: 'transparent', border: '1px solid #ddd', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold', color: '#2c3e50' }}
+              style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 15px', background: 'transparent', border: '1px solid #ddd', borderRadius: '20px', cursor: 'pointer', fontWeight: 600, color: '#2c3e50', fontSize: '13.5px' }}
             >
-              <User size={18} />
+              <User size={17} />
               {user.firstname || user.email}
             </button>
 
             {showDropdown && (
               <div style={{
-                position: 'absolute', top: '100%', right: 0, marginTop: '10px', width: '200px',
-                background: 'white', borderRadius: '12px', boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
-                display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: '5px 0'
+                position: 'absolute', top: 'calc(100% + 10px)', right: 0, width: '220px',
+                background: 'white', borderRadius: '14px',
+                boxShadow: '0 8px 30px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06)',
+                border: '1px solid #f0f0f0',
+                display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: '6px 0'
               }}>
-                <button 
-                  onClick={() => { setShowHistory && setShowHistory(true); setShowDropdown(false); }}
-                  style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px 20px', background: 'transparent', border: 'none', width: '100%', textAlign: 'left', cursor: 'pointer', color: '#333' }}
-                  onMouseEnter={(e) => e.currentTarget.style.background = '#f5f5f5'}
-                  onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
-                >
-                  <History size={18} /> Trip History
+
+                {/* Header */}
+                <div style={{ padding: '10px 20px 8px', fontSize: '11px', color: '#aaa', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                  Mon compte
+                </div>
+
+                {/* History & Data */}
+                <button style={btnStyle()} onClick={() => { setShowHistory(true); close(); }}
+                  onMouseEnter={e => e.currentTarget.style.background = '#f7f7f7'}
+                  onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                  <History size={16} /> Historique des trajets
                 </button>
-                <div style={{ height: '1px', background: '#eee', margin: '0 10px' }} />
-                <button 
-                  onClick={() => { handleLogout(); setShowDropdown(false); }}
-                  style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px 20px', background: 'transparent', border: 'none', width: '100%', textAlign: 'left', cursor: 'pointer', color: '#e74c3c' }}
-                  onMouseEnter={(e) => e.currentTarget.style.background = '#fcf0f0'}
-                  onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
-                >
-                  <LogOut size={18} /> Déconnexion
+                <button style={btnStyle()} onClick={handleExportData}
+                  onMouseEnter={e => e.currentTarget.style.background = '#f7f7f7'}
+                  onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                  <Download size={16} /> Exporter mes données
+                </button>
+                <button style={btnStyle('#e67e22')} onClick={handleClearHistory}
+                  onMouseEnter={e => e.currentTarget.style.background = '#fffaf5'}
+                  onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                  <Trash2 size={16} /> Effacer l'historique
+                </button>
+
+                <div style={{ height: '1px', background: '#f0f0f0', margin: '4px 12px' }} />
+
+                {/* Account */}
+                <div style={{ padding: '8px 20px 4px', fontSize: '11px', color: '#aaa', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                  Compte & Confidentialité
+                </div>
+                <button style={btnStyle('#c0392b')} onClick={() => { onDeleteAccount && onDeleteAccount(); close(); }}
+                  onMouseEnter={e => e.currentTarget.style.background = '#fcf0f0'}
+                  onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                  <UserX size={16} /> Supprimer le compte
+                </button>
+
+                <div style={{ height: '1px', background: '#f0f0f0', margin: '4px 12px' }} />
+
+                <button style={btnStyle('#e74c3c')} onClick={() => { handleLogout(); close(); }}
+                  onMouseEnter={e => e.currentTarget.style.background = '#fcf0f0'}
+                  onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                  <LogOut size={16} /> Déconnexion
                 </button>
               </div>
             )}
