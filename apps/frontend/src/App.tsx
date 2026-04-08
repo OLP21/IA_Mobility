@@ -115,7 +115,7 @@ export default function App() {
      }
 
      let bestParking = null;
-     let highestAvailability = -1;
+     let bestScore = -1;
 
      for (const p of nearbyParkings) {
         try {
@@ -124,9 +124,14 @@ export default function App() {
            if (data.prediction_occupation) {
                const occupation = parseFloat(data.prediction_occupation);
                const availability = 100 - occupation; 
-               if (availability > highestAvailability) {
-                   highestAvailability = availability;
-                   const distToDest = haversineDistance(finalDestCoords[0], finalDestCoords[1], p.geometry.coordinates[1], p.geometry.coordinates[0]);
+               const distToDest = haversineDistance(finalDestCoords[0], finalDestCoords[1], p.geometry.coordinates[1], p.geometry.coordinates[0]);
+
+               // L'algorithme privilégie désormais un équilibre entre proximité et disponibilité
+               // Un parking très proche pénalise moins le score qu'un parking lointain, même si ce dernier est un peu plus vide.
+               const score = availability / (distToDest + 0.2);
+
+               if (score > bestScore) {
+                   bestScore = score;
                    bestParking = { name: p.properties.nom, availability: Math.round(availability), walkDistance: Math.round(distToDest * 1000) };
                }
            }

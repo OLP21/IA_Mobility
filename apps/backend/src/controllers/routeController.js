@@ -121,6 +121,9 @@ exports.getRoute = async (req, res) => {
         });
 
     } catch (error) {
+        if (error.message && (error.message.includes("introuvable") || error.message.includes("imprécise") || error.message.includes("Géolocalisation"))) {
+            return res.status(400).json({ error: error.message });
+        }
         if (error.response) {
             console.error("API Error Response Data:", error.response.data);
             return res.status(error.response.status || 500).json({ error: "Erreur API tierce", details: error.response.data });

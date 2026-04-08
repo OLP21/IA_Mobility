@@ -55,12 +55,12 @@ Copy-Item apps\backend\.env.example apps\backend\.env
 DB_HOST=db
 DB_PORT=5432
 DB_NAME=ia_mobility
-DB_USER=teddy
+DB_USER=toi
 DB_PASSWORD=ton_password
 
-ORS_API_KEY=eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6Ijg0MWUxMzBlOTEwYjQ2MmU5ZDc1MWRjZWMxZWQ4OWZjIiwiaCI6Im11cm11cjY0In0=
-WEATHER_API_KEY=c72be3419f3fac81e7978aa1378cf098
-HERE_API_KEY=np9YC_rjD4mQxPMSlE5BC9ajacWJvKTrnVJByunx-Bk
+ORS_API_KEY=ton_truc
+WEATHER_API_KEY=ton_truc
+HERE_API_KEY=ton_truc
 
 SESSION_SECRET=une_chaine_aleatoire_longue_et_secrete
 
