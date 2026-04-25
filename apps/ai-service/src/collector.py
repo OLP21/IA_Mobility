@@ -6,7 +6,7 @@ import os
 # --- CONFIGURATION DES CHEMINS ---
 # On trouve le dossier 'ai-service' (racine du projet Python)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-# On définit le chemin vers data/raw/
+# Définition du chemin vers data/raw/
 FICHIER_DEST = os.path.join(BASE_DIR, "data", "raw", "historique_parkings.json")
 
 CLE = "UFM1S7RTLN" 
@@ -28,9 +28,9 @@ def collecter():
                 "donnees": data['features']
             }
             
-            # 2. ÉCRITURE PROPRE (Correction de ta ligne f.write)
+            # 2. Ecriture du fichier JSON
             with open(FICHIER_DEST, "w") as f:
-                # Utilise json.dump directement, c'est plus simple
+                # Utilisation de json.dump pour écrire le fichier JSON
                 json.dump(capture, f, indent=4)
                 
             print(f"[{capture['sauvegarde_le']}] Données enregistrées dans {FICHIER_DEST}")

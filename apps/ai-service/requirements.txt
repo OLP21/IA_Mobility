@@ -4,3 +4,5 @@ scikit-learn
 joblib
 requests
 psycopg2-binary
+pytest
+prometheus_client

@@ -13,6 +13,7 @@ const app = express();
 const routeRoutes = require("./routes/routeRoutes");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/routes_user");
+const parkingRoutes = require("./routes/parkingRoutes");
 
 // MIDDLEWARES
 
@@ -46,6 +47,7 @@ app.get("/", (req, res) => {
 
 // Routes API
 app.use("/api", routeRoutes);
+app.use("/api/parkings", parkingRoutes);
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 

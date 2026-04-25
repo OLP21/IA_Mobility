@@ -1,0 +1,69 @@
+name: IA Mobility - MLOps CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main", "dev" ]
+  pull_request:
+    branches: [ "main", "dev" ]
+
+jobs:
+  # 1. Tests Automatisés Node.js (C18)
+  test-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - name: Install Dependencies
+        run: |
+          cd apps/backend
+          npm install
+      - name: Code Quality & Tests
+        run: |
+          cd apps/backend
+          npm run test
+
+  # 2. Tests Automatisés IA Python (C12)
+  test-ai:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install dependencies & Pytest
+        run: |
+          cd apps/ai-service
+          pip install -r requirements.txt
+          pip install pytest
+          pytest tests/ --disable-warnings
+
+  # 3. Livraison Continue : Docker Build & Push (C13, C19)
+  build-and-deliver:
+    needs: [test-backend, test-ai] # Ne se déclenche QUE si les tests passent
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Log in to Docker Hub
+        # Simulation d'action (Remplir DOCKERHUB_USERNAME dans les Secrets GitHub)
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          
+      - name: Build and Push Backend Image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./apps/backend
+          push: false # Mettre 'true' en conditions de production réelles
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/ia-mobility-backend:latest
+          
+      - name: Build and Push AI Service Image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./apps/ai-service
+          push: false # Mettre 'true' en conditions de production réelles
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/ia-mobility-ai:latest
