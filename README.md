@@ -1,10 +1,10 @@
-# 🗺️ IA Mobility — Guide de démarrage
+# IA Mobility — Guide de démarrage
 
 Application de navigation intelligente pour Bordeaux Métropole, avec suggestions d'itinéraires, météo, trafic et prédiction de parkings.
 
 ---
 
-## 📋 Prérequis
+## Prérequis
 
 Installez ces outils **avant** de cloner le projet :
 
@@ -49,7 +49,7 @@ cp apps/backend/.env.example apps/backend/.env
 Copy-Item apps\backend\.env.example apps\backend\.env
 ```
 
-> ⚠️ Si le fichier `.env.example` n'existe pas, créez `apps/backend/.env` manuellement avec ce contenu :
+>  Si le fichier `.env.example` n'existe pas, créez `apps/backend/.env` manuellement avec ce contenu :
 
 ```env
 DB_HOST=db
@@ -89,7 +89,7 @@ docker-compose up --build
 > La première fois, Docker va télécharger les images et créer la base de données automatiquement. Cela peut prendre 1 à 2 minutes.  
 > Les fois suivantes, `docker-compose up` suffit (sans `--build`).
 
-✅ Le backend est prêt quand vous voyez : `Server running on port 3000`
+Le backend est prêt quand vous voyez : `Server running on port 3000`
 
 **Vérification :** Ouvrez [http://localhost:3000](http://localhost:3000) — vous devriez voir `{"message":"IA Mobility backend running + Auth running"}`
 
@@ -122,7 +122,7 @@ python main.py
 > Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 > ```
 
-✅ Le service IA est prêt quand vous voyez : `Running on http://0.0.0.0:5001`
+Le service IA est prêt quand vous voyez : `Running on http://0.0.0.0:5001`
 
 ---
 
@@ -134,13 +134,13 @@ Ouvrez un **nouveau terminal** à la **racine** du projet :
 npm run dev -w @ia-mobility/frontend
 ```
 
-✅ Le frontend est prêt quand vous voyez : `Local: http://localhost:5173/`
+Le frontend est prêt quand vous voyez : `Local: http://localhost:5173/`
 
 **Ouvrez [http://localhost:5173](http://localhost:5173) dans votre navigateur.**
 
 ---
 
-## 🌐 Ports utilisés
+## Ports utilisés
 
 | Service | URL | Description |
 |---|---|---|
@@ -151,7 +151,7 @@ npm run dev -w @ia-mobility/frontend
 
 ---
 
-## 🗂️ Structure du projet
+## Structure du projet
 
 ```
 IA_Mobility/
@@ -168,7 +168,7 @@ IA_Mobility/
 
 ---
 
-## ❓ Problèmes fréquents
+## Problèmes fréquents
 
 **Docker ne démarre pas**
 → Vérifiez que Docker Desktop est ouvert et running (icône baleine dans la barre des tâches).
