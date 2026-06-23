@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  # La Base de Données (PostgreSQL)
+  db:
+    image: postgres:15-alpine
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      # Injection automatique de ton SQL au premier démarrage
+      - ./database/IA_Mobility.sql:/docker-entrypoint-initdb.d/IA_Mobility.sql
+      # Persistance des données sur ton Mac
+      - postgres_data:/var/lib/postgresql/data
+
+  # Ton application Node.js
+  backend:
+    build: .
+    container_name: node_backend
+    restart: on-failure
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - db
+    env_file:
+      - .env
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: always
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: always
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_USER=admin
+    depends_on:
+      - prometheus
+    volumes:
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana/dashboards:/etc/grafana/dashboards
+
+volumes:
+  postgres_data:

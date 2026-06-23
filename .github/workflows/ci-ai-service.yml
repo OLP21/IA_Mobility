@@ -1,0 +1,45 @@
+name: CI Service IA (Python)
+
+# Se déclenche à chaque push ou Pull Request sur la branche Teddy et main
+on:
+  push:
+    branches: [Teddy, main]
+    paths:
+      - 'apps/ai-service/**'
+  pull_request:
+    branches: [Teddy, main]
+    paths:
+      - 'apps/ai-service/**'
+
+jobs:
+  test-ai-service:
+    name: Tests Pytest - Modèle Random Forest
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Récupère le code
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      # 2. Installe Python 3.11
+      - name: Installer Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: apps/ai-service/requirements.txt
+
+      # 3. Installe les dépendances Python
+      - name: Installer les dépendances
+        working-directory: apps/ai-service
+        run: pip install -r requirements.txt
+
+      # 4. Entraîne le modèle (nécessaire pour que les tests .pkl fonctionnent)
+      - name: Entraîner le modèle avant les tests
+        working-directory: apps/ai-service
+        run: python src/predictor.py
+
+      # 5. Lance les tests Pytest
+      - name: Lancer les tests Pytest
+        working-directory: apps/ai-service
+        run: pytest tests/ -v

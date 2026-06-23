@@ -1,5 +1,5 @@
 {
-    "sauvegarde_le": "2026-03-25 21:44:00",
+    "sauvegarde_le": "2026-03-20 17:57:37",
     "donnees": [
         {
             "type": "Feature",
@@ -16,10 +16,10 @@
                 "geom_err": null,
                 "ident": "CUBPK44",
                 "nom": "Parc Relais Brandenburg",
-                "libres": 0,
+                "libres": 160,
                 "total": 211,
                 "prepaye": false,
-                "etat": "COMPLET",
+                "etat": "LIBRE",
                 "connecte": true,
                 "url": "https://www.infotbm.com/fr/parc-relais",
                 "ta_titul": 0,
@@ -70,7 +70,7 @@
                 "ta_handi": "AUTRE",
                 "siret": "80822705200012",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:45+01:00"
+                "mdate": "2026-03-20T17:54:52+01:00"
             }
         },
         {
@@ -88,7 +88,7 @@
                 "geom_err": null,
                 "ident": "CUBPK14",
                 "nom": "Bord'Eau Village",
-                "libres": 432,
+                "libres": 375,
                 "total": 540,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -142,7 +142,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "37888823401562",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:38:38+01:00"
+                "mdate": "2026-03-20T17:53:31+01:00"
             }
         },
         {
@@ -160,7 +160,7 @@
                 "geom_err": null,
                 "ident": "CUBPK15",
                 "nom": "Clemenceau",
-                "libres": 236,
+                "libres": 272,
                 "total": 379,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -214,7 +214,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "37888823401562",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:38:40+01:00"
+                "mdate": "2026-03-20T17:53:32+01:00"
             }
         },
         {
@@ -520,7 +520,7 @@
                 "geom_err": null,
                 "ident": "CUBPK95",
                 "nom": "Grand Parc",
-                "libres": 291,
+                "libres": 243,
                 "total": 341,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -574,7 +574,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "453 335 069 00010",
                 "cdate": "2019-12-09T15:54:27+01:00",
-                "mdate": "2026-03-25T21:41:03+01:00"
+                "mdate": "2026-03-20T17:56:07+01:00"
             }
         },
         {
@@ -592,7 +592,7 @@
                 "geom_err": null,
                 "ident": "CUBPK84",
                 "nom": "Parc Relais Quarante Journaux",
-                "libres": 197,
+                "libres": 169,
                 "total": 200,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -646,7 +646,7 @@
                 "ta_handi": "AUTRE",
                 "siret": "80822705200012",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:38:45+01:00"
+                "mdate": "2026-03-20T17:54:52+01:00"
             }
         },
         {
@@ -736,7 +736,7 @@
                 "geom_err": null,
                 "ident": "CUBPK97",
                 "nom": "Parc Relais Cantinolle",
-                "libres": 501,
+                "libres": 557,
                 "total": 620,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -790,7 +790,7 @@
                 "ta_handi": "AUTRE",
                 "siret": "80822705200012",
                 "cdate": "2020-03-02T16:09:08+01:00",
-                "mdate": "2026-03-25T21:41:05+01:00"
+                "mdate": "2026-03-20T17:54:52+01:00"
             }
         },
         {
@@ -808,7 +808,7 @@
                 "geom_err": null,
                 "ident": "CUBPK98",
                 "nom": "Parc Relais De L'Hippodrome",
-                "libres": 58,
+                "libres": 153,
                 "total": 250,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -862,7 +862,7 @@
                 "ta_handi": "AUTRE",
                 "siret": "80822705200012",
                 "cdate": "2020-03-02T16:16:49+01:00",
-                "mdate": "2026-03-25T21:41:05+01:00"
+                "mdate": "2026-03-20T17:54:52+01:00"
             }
         },
         {
@@ -952,7 +952,7 @@
                 "geom_err": null,
                 "ident": "CUBPK49",
                 "nom": "Parc Relais La Gardette Nord",
-                "libres": 242,
+                "libres": 190,
                 "total": 242,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -1006,7 +1006,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "80822705200012",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:39:05+01:00"
+                "mdate": "2026-03-20T17:54:52+01:00"
             }
         },
         {
@@ -1078,7 +1078,7 @@
                 "ta_handi": "AUTRE",
                 "siret": "80822705200012",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:38:45+01:00"
+                "mdate": "2026-03-20T17:54:52+01:00"
             }
         },
         {
@@ -1096,8 +1096,8 @@
                 "geom_err": null,
                 "ident": "CUBPK72",
                 "nom": "Begles Les Secheries",
-                "libres": 294,
-                "total": 300,
+                "libres": 202,
+                "total": 400,
                 "prepaye": false,
                 "etat": "LIBRE",
                 "connecte": true,
@@ -1150,7 +1150,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "453 335 069 00010",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:46+01:00"
+                "mdate": "2026-03-20T17:56:01+01:00"
             }
         },
         {
@@ -1168,7 +1168,7 @@
                 "geom_err": null,
                 "ident": "CUBPK76",
                 "nom": "Parc Relais Gare De Blanquefort",
-                "libres": 9,
+                "libres": 132,
                 "total": 206,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -1222,7 +1222,7 @@
                 "ta_handi": "AUTRE",
                 "siret": "80822705200012",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:38:45+01:00"
+                "mdate": "2026-03-20T17:54:52+01:00"
             }
         },
         {
@@ -1240,7 +1240,7 @@
                 "geom_err": null,
                 "ident": "CUBPK16",
                 "nom": "Victor Hugo",
-                "libres": 215,
+                "libres": 241,
                 "total": 634,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -1294,7 +1294,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "453 335 069 00010",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:41:01+01:00"
+                "mdate": "2026-03-20T17:55:54+01:00"
             }
         },
         {
@@ -1312,7 +1312,7 @@
                 "geom_err": null,
                 "ident": "CUBPK29",
                 "nom": "Victoire",
-                "libres": 205,
+                "libres": 235,
                 "total": 466,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -1366,7 +1366,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "453 335 069 00010",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:01+01:00"
+                "mdate": "2026-03-20T17:56:01+01:00"
             }
         },
         {
@@ -1510,7 +1510,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "453 335 069 00010",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:20+01:00"
+                "mdate": "2026-03-20T17:55:38+01:00"
             }
         },
         {
@@ -1528,7 +1528,7 @@
                 "geom_err": null,
                 "ident": "CUBPK30",
                 "nom": "Centre Commercial Meriadeck",
-                "libres": 984,
+                "libres": 858,
                 "total": 1230,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -1582,7 +1582,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "453 335 069 00010",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:01+01:00"
+                "mdate": "2026-03-20T17:56:01+01:00"
             }
         },
         {
@@ -1600,7 +1600,7 @@
                 "geom_err": null,
                 "ident": "CUBPK34",
                 "nom": "Huit Mai 45",
-                "libres": 187,
+                "libres": 202,
                 "total": 399,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -1654,7 +1654,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "453 335 069 00010",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:01+01:00"
+                "mdate": "2026-03-20T17:56:01+01:00"
             }
         },
         {
@@ -1672,7 +1672,7 @@
                 "geom_err": null,
                 "ident": "CUBPK24",
                 "nom": "Gambetta",
-                "libres": 133,
+                "libres": 114,
                 "total": 438,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -1726,7 +1726,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "453 335 069 00010",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:18+01:00"
+                "mdate": "2026-03-20T17:55:36+01:00"
             }
         },
         {
@@ -1888,7 +1888,7 @@
                 "geom_err": null,
                 "ident": "CUBPK26",
                 "nom": "Republique",
-                "libres": 158,
+                "libres": 181,
                 "total": 361,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -1942,7 +1942,7 @@
                 "ta_handi": "AUTRE",
                 "siret": "453 335 069 00010",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:22+01:00"
+                "mdate": "2026-03-20T17:55:42+01:00"
             }
         },
         {
@@ -1960,7 +1960,7 @@
                 "geom_err": null,
                 "ident": "CUBPK07",
                 "nom": "Grands Hommes",
-                "libres": 211,
+                "libres": 238,
                 "total": 415,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -2014,7 +2014,7 @@
                 "ta_handi": "AUTRE",
                 "siret": "453 335 069 00010",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:01+01:00"
+                "mdate": "2026-03-20T17:56:01+01:00"
             }
         },
         {
@@ -2536,7 +2536,7 @@
                 "geom_err": null,
                 "ident": "CUBPK54",
                 "nom": "Parc Relais Ravezies Le Bouscat",
-                "libres": 42,
+                "libres": 247,
                 "total": 366,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -2590,7 +2590,7 @@
                 "ta_handi": "AUTRE",
                 "siret": "80822705200012",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:45+01:00"
+                "mdate": "2026-03-20T17:54:52+01:00"
             }
         },
         {
@@ -2608,7 +2608,7 @@
                 "geom_err": null,
                 "ident": "CUBPK38",
                 "nom": "Liberation",
-                "libres": 50,
+                "libres": 66,
                 "total": 137,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -2662,7 +2662,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "453 335 069 00010",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:02+01:00"
+                "mdate": "2026-03-20T17:56:01+01:00"
             }
         },
         {
@@ -2680,7 +2680,7 @@
                 "geom_err": null,
                 "ident": "CUBPK74",
                 "nom": "Laharpe",
-                "libres": 30,
+                "libres": 23,
                 "total": 80,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -2734,7 +2734,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "453 335 069 00010",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:01+01:00"
+                "mdate": "2026-03-20T17:56:01+01:00"
             }
         },
         {
@@ -2752,7 +2752,7 @@
                 "geom_err": null,
                 "ident": "CUBPK77",
                 "nom": "Parc Relais Gare De Bruges ",
-                "libres": 58,
+                "libres": 46,
                 "total": 57,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -2806,7 +2806,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "80822705200012",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:45+01:00"
+                "mdate": "2026-03-20T17:54:52+01:00"
             }
         },
         {
@@ -2824,7 +2824,7 @@
                 "geom_err": null,
                 "ident": "CUBPK47",
                 "nom": "Parc Relais Floirac Dravemont",
-                "libres": 52,
+                "libres": 42,
                 "total": 52,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -2878,7 +2878,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "80822705200012",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:45+01:00"
+                "mdate": "2026-03-20T17:54:52+01:00"
             }
         },
         {
@@ -2896,7 +2896,7 @@
                 "geom_err": null,
                 "ident": "CUBPK82",
                 "nom": "Floirac Arena",
-                "libres": 960,
+                "libres": 959,
                 "total": 962,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -2950,7 +2950,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "453 335 069 00010",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:54+01:00"
+                "mdate": "2026-03-20T17:55:50+01:00"
             }
         },
         {
@@ -2968,7 +2968,7 @@
                 "geom_err": null,
                 "ident": "CUBPK57",
                 "nom": "Parc Relais Le Haillan Rostand",
-                "libres": 127,
+                "libres": 179,
                 "total": 204,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -3022,7 +3022,7 @@
                 "ta_handi": "AUTRE",
                 "siret": "80822705200012",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:45+01:00"
+                "mdate": "2026-03-20T17:54:52+01:00"
             }
         },
         {
@@ -3040,7 +3040,7 @@
                 "geom_err": null,
                 "ident": "CUBPK50",
                 "nom": "Parc Relais La Gardette Sud",
-                "libres": 146,
+                "libres": 140,
                 "total": 151,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -3094,7 +3094,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "80822705200012",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:45+01:00"
+                "mdate": "2026-03-20T17:54:52+01:00"
             }
         },
         {
@@ -3112,7 +3112,7 @@
                 "geom_err": null,
                 "ident": "CUBPK51",
                 "nom": "Parc Relais Lauriers",
-                "libres": 136,
+                "libres": 115,
                 "total": 149,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -3166,7 +3166,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "80822705200012",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:45+01:00"
+                "mdate": "2026-03-20T17:54:52+01:00"
             }
         },
         {
@@ -3184,7 +3184,7 @@
                 "geom_err": null,
                 "ident": "CUBPK45",
                 "nom": "Parc Relais Buttiniere",
-                "libres": 547,
+                "libres": 351,
                 "total": 600,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -3238,7 +3238,7 @@
                 "ta_handi": "AUTRE",
                 "siret": "80822705200012",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:45+01:00"
+                "mdate": "2026-03-20T17:54:52+01:00"
             }
         },
         {
@@ -3454,7 +3454,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "80822705200012",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:45+01:00"
+                "mdate": "2026-03-20T17:54:32+01:00"
             }
         },
         {
@@ -3472,7 +3472,7 @@
                 "geom_err": null,
                 "ident": "CUBPK53",
                 "nom": "Parc Relais Quatre Chemins",
-                "libres": 250,
+                "libres": 327,
                 "total": 396,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -3526,7 +3526,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "80822705200012",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:45+01:00"
+                "mdate": "2026-03-20T17:54:52+01:00"
             }
         },
         {
@@ -3760,7 +3760,7 @@
                 "geom_err": null,
                 "ident": "CUBPK40",
                 "nom": "Pessac Centre",
-                "libres": 323,
+                "libres": 279,
                 "total": 400,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -3814,7 +3814,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "453 335 069 00010",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:01+01:00"
+                "mdate": "2026-03-20T17:56:01+01:00"
             }
         },
         {
@@ -3886,7 +3886,7 @@
                 "ta_handi": "AUTRE",
                 "siret": "80822705200012",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:45+01:00"
+                "mdate": "2026-03-20T17:54:52+01:00"
             }
         },
         {
@@ -3904,7 +3904,7 @@
                 "geom_err": null,
                 "ident": "CUBPK56",
                 "nom": "Parc Relais Unitec",
-                "libres": 35,
+                "libres": 131,
                 "total": 218,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -3958,7 +3958,7 @@
                 "ta_handi": "AUTRE",
                 "siret": "80822705200012",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:45+01:00"
+                "mdate": "2026-03-20T17:54:52+01:00"
             }
         },
         {
@@ -3976,7 +3976,7 @@
                 "geom_err": null,
                 "ident": "CUBPK59",
                 "nom": "Parc Relais Gare De Pessac Alouette",
-                "libres": 16,
+                "libres": 63,
                 "total": 148,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -4030,7 +4030,7 @@
                 "ta_handi": "AUTRE",
                 "siret": "80822705200012",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:45+01:00"
+                "mdate": "2026-03-20T17:54:52+01:00"
             }
         },
         {
@@ -4048,7 +4048,7 @@
                 "geom_err": null,
                 "ident": "CUBPK42",
                 "nom": "Parc Relais Arts Et Metiers",
-                "libres": 594,
+                "libres": 602,
                 "total": 590,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -4102,7 +4102,7 @@
                 "ta_handi": "AUTRE",
                 "siret": "80822705200012",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:45+01:00"
+                "mdate": "2026-03-20T17:54:52+01:00"
             }
         },
         {
@@ -4192,7 +4192,7 @@
                 "geom_err": null,
                 "ident": "CUBPK88",
                 "nom": "Parc Relais Cap Metiers",
-                "libres": 96,
+                "libres": 139,
                 "total": 146,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -4246,7 +4246,7 @@
                 "ta_handi": "AUTRE",
                 "siret": "80822705200012",
                 "cdate": "2018-11-13T17:04:59+01:00",
-                "mdate": "2026-03-25T21:40:45+01:00"
+                "mdate": "2026-03-20T17:54:52+01:00"
             }
         },
         {
@@ -4408,7 +4408,7 @@
                 "geom_err": null,
                 "ident": "CUBPK58",
                 "nom": "Parc Relais Les Pins",
-                "libres": 198,
+                "libres": 206,
                 "total": 220,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -4462,7 +4462,7 @@
                 "ta_handi": "AUTRE",
                 "siret": "80822705200012",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:45+01:00"
+                "mdate": "2026-03-20T17:54:52+01:00"
             }
         },
         {
@@ -4480,7 +4480,7 @@
                 "geom_err": null,
                 "ident": "CUBPK91",
                 "nom": "Parc Relais Villenave Pyrenees",
-                "libres": 343,
+                "libres": 239,
                 "total": 399,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -4534,7 +4534,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "80822705200012",
                 "cdate": "2019-02-05T16:41:59+01:00",
-                "mdate": "2026-03-25T21:41:05+01:00"
+                "mdate": "2026-03-20T17:54:52+01:00"
             }
         },
         {
@@ -4624,7 +4624,7 @@
                 "geom_err": null,
                 "ident": "CUBPK27",
                 "nom": "Cite Mondiale",
-                "libres": 254,
+                "libres": 296,
                 "total": 842,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -4678,7 +4678,7 @@
                 "ta_handi": "AUTRE",
                 "siret": "453 335 069 00010",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:23+01:00"
+                "mdate": "2026-03-20T17:55:44+01:00"
             }
         },
         {
@@ -4696,8 +4696,8 @@
                 "geom_err": null,
                 "ident": "CUBPK33",
                 "nom": "Gare Saint Jean",
-                "libres": 103,
-                "total": 410,
+                "libres": 80,
+                "total": 212,
                 "prepaye": false,
                 "etat": "LIBRE",
                 "connecte": true,
@@ -4750,7 +4750,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "453 335 069 00010",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:01+01:00"
+                "mdate": "2026-03-20T17:56:01+01:00"
             }
         },
         {
@@ -4768,7 +4768,7 @@
                 "geom_err": null,
                 "ident": "CUBPK35",
                 "nom": "Porte De Bordeaux",
-                "libres": 209,
+                "libres": 172,
                 "total": 344,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -4822,7 +4822,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "453 335 069 00010",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:21+01:00"
+                "mdate": "2026-03-20T17:55:40+01:00"
             }
         },
         {
@@ -4912,7 +4912,7 @@
                 "geom_err": null,
                 "ident": "CUBPK18",
                 "nom": "Allees De Chartres",
-                "libres": 263,
+                "libres": 85,
                 "total": 415,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -4966,7 +4966,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "453 335 069 00010",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:52+01:00"
+                "mdate": "2026-03-20T17:56:03+01:00"
             }
         },
         {
@@ -4984,7 +4984,7 @@
                 "geom_err": null,
                 "ident": "CUBPK55",
                 "nom": "Parc Relais Stalingrad",
-                "libres": 62,
+                "libres": 23,
                 "total": 120,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -5038,7 +5038,7 @@
                 "ta_handi": "AUTRE",
                 "siret": "80822705200012",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:45+01:00"
+                "mdate": "2026-03-20T17:54:52+01:00"
             }
         },
         {
@@ -5056,7 +5056,7 @@
                 "geom_err": null,
                 "ident": "CUBPK48",
                 "nom": "Parc Relais Galin",
-                "libres": 220,
+                "libres": 140,
                 "total": 279,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -5110,7 +5110,7 @@
                 "ta_handi": "AUTRE",
                 "siret": "80822705200012",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:45+01:00"
+                "mdate": "2026-03-20T17:54:52+01:00"
             }
         },
         {
@@ -5128,7 +5128,7 @@
                 "geom_err": null,
                 "ident": "CUBPK36",
                 "nom": "Bergonie",
-                "libres": 52,
+                "libres": 20,
                 "total": 66,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -5182,7 +5182,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "453 335 069 00010",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:41:02+01:00"
+                "mdate": "2026-03-20T17:55:55+01:00"
             }
         },
         {
@@ -5200,7 +5200,7 @@
                 "geom_err": null,
                 "ident": "CUBPK73",
                 "nom": "Beaujon",
-                "libres": 27,
+                "libres": 30,
                 "total": 92,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -5254,7 +5254,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "453 335 069 00010",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:01+01:00"
+                "mdate": "2026-03-20T17:56:01+01:00"
             }
         },
         {
@@ -5272,7 +5272,7 @@
                 "geom_err": null,
                 "ident": "CUBPK78",
                 "nom": "Paludate - Saint Jean",
-                "libres": 346,
+                "libres": 351,
                 "total": 566,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -5326,7 +5326,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "453 335 069 00010",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:26+01:00"
+                "mdate": "2026-03-20T17:55:48+01:00"
             }
         },
         {
@@ -5398,7 +5398,7 @@
                 "ta_handi": "AUTRE",
                 "siret": "80822705200012",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:45+01:00"
+                "mdate": "2026-03-20T17:54:52+01:00"
             }
         },
         {
@@ -5776,7 +5776,7 @@
                 "geom_err": null,
                 "ident": "CUBPK25",
                 "nom": "Pey Berland - Saint Christoly",
-                "libres": 115,
+                "libres": 110,
                 "total": 399,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -5830,7 +5830,7 @@
                 "ta_handi": "AUTRE",
                 "siret": "453 335 069 00010",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:02+01:00"
+                "mdate": "2026-03-20T17:56:01+01:00"
             }
         },
         {
@@ -5848,7 +5848,7 @@
                 "geom_err": null,
                 "ident": "CUBPK100",
                 "nom": "Bassins A Flots",
-                "libres": 227,
+                "libres": 154,
                 "total": 250,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -5902,7 +5902,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "435 272 596 01814",
                 "cdate": "2020-10-21T17:02:22+02:00",
-                "mdate": "2026-03-25T21:40:53+01:00"
+                "mdate": "2026-03-20T17:56:06+01:00"
             }
         },
         {
@@ -6136,7 +6136,7 @@
                 "geom_err": null,
                 "ident": "CUBPK39",
                 "nom": "Merignac Centre",
-                "libres": 216,
+                "libres": 204,
                 "total": 285,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -6190,7 +6190,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "453 335 069 00010",
                 "cdate": "2018-06-01T02:00:00+02:00",
-                "mdate": "2026-03-25T21:40:01+01:00"
+                "mdate": "2026-03-20T17:56:01+01:00"
             }
         },
         {
@@ -6280,7 +6280,7 @@
                 "geom_err": null,
                 "ident": "CUBPK109",
                 "nom": "Amedee St Germain",
-                "libres": 345,
+                "libres": 375,
                 "total": 639,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -6334,7 +6334,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "453 335 069 00010",
                 "cdate": "2022-03-21T10:18:59+01:00",
-                "mdate": "2026-03-25T21:40:24+01:00"
+                "mdate": "2026-03-20T17:55:46+01:00"
             }
         },
         {
@@ -6406,7 +6406,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "808 227 052 00012",
                 "cdate": "2025-03-11T13:29:12+01:00",
-                "mdate": "2026-03-25T21:41:05+01:00"
+                "mdate": "2026-03-20T17:54:52+01:00"
             }
         },
         {
@@ -6784,7 +6784,7 @@
                 "geom_err": null,
                 "ident": "CUBPK112",
                 "nom": "Amplitude",
-                "libres": 112,
+                "libres": 163,
                 "total": 396,
                 "prepaye": false,
                 "etat": "LIBRE",
@@ -6838,7 +6838,7 @@
                 "ta_handi": "NORMAL_PAYANT",
                 "siret": "453 335 069 00010",
                 "cdate": "2024-01-17T11:56:15+01:00",
-                "mdate": "2026-03-25T21:40:28+01:00"
+                "mdate": "2026-03-20T17:55:50+01:00"
             }
         },
         {

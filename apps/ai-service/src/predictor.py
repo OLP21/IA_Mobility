@@ -14,7 +14,7 @@ def entrainer_ia():
     print(f"--- Entraînement de l'IA sur {FICHIER_CLEAN} ---")
     
     if not os.path.exists(FICHIER_CLEAN):
-        print("❌ CSV introuvable. Lance processor.py d'abord.")
+        print("CSV introuvable. Lance processor.py d'abord.")
         return
 
     # 1. Chargement des données
@@ -37,7 +37,7 @@ def entrainer_ia():
     model = RandomForestRegressor(n_estimators=100, random_state=42)
     model.fit(X, y)
 
-    # 5. Sauvegarde du modèle ET de l'encodeur
+    # 5. Sauvegarde du modèle et de l'encodeur
     os.makedirs(DOSSIER_MODELE, exist_ok=True)
     joblib.dump(model, MODELE_PATH)
     joblib.dump(le, ENCODER_PATH)
