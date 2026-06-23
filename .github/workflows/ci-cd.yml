@@ -47,12 +47,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Log in to Docker Hub
-        # Simulation d'action (Remplir DOCKERHUB_USERNAME dans les Secrets GitHub)
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      # - name: Log in to Docker Hub
+      #   # Simulation d'action (Remplir DOCKERHUB_USERNAME dans les Secrets GitHub)
+      #   uses: docker/login-action@v2
+      #   with:
+      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
+      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
           
       - name: Build and Push Backend Image
         uses: docker/build-push-action@v4
