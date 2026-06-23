@@ -8,9 +8,9 @@ exports.savePrediction = async (req, res) => {
             return res.status(400).json({ erreur: "Requête invalide : champs manquants." });
         }
 
-        // Récupérer l'ID officiel du parking en base de données
+        // Récupérer l'ID officiel et la capacité du parking en base de données
         const parkingResult = await pool.query(
-            "SELECT id FROM parkings WHERE name = $1 LIMIT 1",
+            "SELECT id, capacity FROM parkings WHERE name = $1 LIMIT 1",
             [parking_name]
         );
 
@@ -18,15 +18,23 @@ exports.savePrediction = async (req, res) => {
             return res.status(404).json({ erreur: `Parking '${parking_name}' introuvable en base.` });
         }
 
-        const parking_id = parkingResult.rows[0].id;
+        const { id: parking_id, capacity } = parkingResult.rows[0];
         const confidence_score = confidence || 85.0;
+
+        // Calculer les places disponibles prédites à partir du % d'occupation :
+        // prediction est le % d'occupation (0 à 100)
+        // places_disponibles = capacity * (1 - prediction / 100)
+        // Si capacity n'est pas défini, on arrondit prediction comme solution de repli.
+        const predicted_available_spots = capacity !== null && capacity !== undefined
+            ? Math.max(0, Math.round(capacity * (1 - prediction / 100)))
+            : Math.round(prediction);
 
         // Effectuer l'insertion
         await pool.query(
             `INSERT INTO parking_predictions 
             (parking_id, predicted_available_spots, confidence, prediction_time)
             VALUES ($1, $2, $3, NOW())`,
-            [parking_id, prediction, confidence_score]
+            [parking_id, predicted_available_spots, confidence_score]
         );
 
         res.status(201).json({ message: "Prédiction de parking archivée avec succès.", parking_id });

@@ -53,7 +53,7 @@ def predict():
         heure = maintenant.hour
         jour = maintenant.weekday()
         minute = maintenant.minute
-
+ 
         # 3. Prédiction
         input_data = pd.DataFrame([[nom_encoded, heure, jour, minute]], 
                                  columns=['nom_encoded', 'heure', 'jour_semaine', 'minute'])
