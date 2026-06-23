@@ -59,11 +59,11 @@ jobs:
         with:
           context: ./apps/backend
           push: false # Mettre 'true' en conditions de production réelles
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/ia-mobility-backend:latest
+          tags: test-backend:latest
           
       - name: Build and Push AI Service Image
         uses: docker/build-push-action@v4
         with:
           context: ./apps/ai-service
           push: false # Mettre 'true' en conditions de production réelles
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/ia-mobility-ai:latest
+          tags: test-ai:latest
