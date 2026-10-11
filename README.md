@@ -1,84 +1,186 @@
-# IA Mobility
+# IA Mobility — Guide de démarrage
 
-Bienvenue sur le dépôt du projet IA Mobility. Le projet utilise une architecture Monorepo pour centraliser le Frontend, le Backend et les services d'IA.
-
-## Etat Actuel du Projet
-
-Le squelette du monorepo est initialisé sur la branche main.
-
-### Tâches déjà accomplies (Teddy):
-
-* Infrastructure : Initialisation du Monorepo avec npm workspaces.
-* Frontend : Initialisation du projet React + Vite + TypeScript.
-* Cartographie : Installation de Leaflet et intégration dans le projet.
-* Composant Map : Modification de App.tsx pour afficher une carte interactive fonctionnelle avec correction du rendu des icônes.
+Application de navigation intelligente pour Bordeaux Métropole, avec suggestions d'itinéraires, météo, trafic et prédiction de parkings.
 
 ---
 
-## Installation et Utilisation
+## Prérequis
 
-Si vous récupérez ce projet via GitHub, vous n'avez pas besoin de réinstaller Node.js ou de recréer les dossiers si vous avez déjà l'environnement prêt.
+Installez ces outils **avant** de cloner le projet :
 
-### 1. Installation des dépendances
+| Outil | Version | Lien |
+|---|---|---|
+| **Git** | n'importe laquelle | [git-scm.com](https://git-scm.com/) |
+| **Node.js** | 18+ | [nodejs.org](https://nodejs.org/) |
+| **Docker Desktop** | n'importe laquelle | [docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop/) |
+| **Python** | 3.10+ | [python.org](https://www.python.org/) |
 
-À la racine du projet, lancez la commande suivante pour installer tous les paquets :
+> **Windows** : Utilisez **PowerShell** ou le **Windows Terminal**. Toutes les commandes ci-dessous fonctionnent tels quels. Docker Desktop doit être ouvert et en cours d'exécution avant de lancer les commandes Docker.
+
+---
+
+## 1. Cloner le projet
+
+```bash
+git clone https://github.com/OLP21/IA_Mobility.git
+cd IA_Mobility
+```
+
+Ensuite, basculez sur la branche principale de développement :
+
+```bash
+git checkout Teddy
+```
+
+---
+
+## 2. Configurer le fichier `.env`
+
+Le backend nécessite un fichier `.env` dans `apps/backend/`.  
+Créez-le en copiant le template ci-dessous :
+
+**Mac/Linux :**
+```bash
+cp apps/backend/.env.example apps/backend/.env
+```
+
+**Windows (PowerShell) :**
+```powershell
+Copy-Item apps\backend\.env.example apps\backend\.env
+```
+
+>  Si le fichier `.env.example` n'existe pas, créez `apps/backend/.env` manuellement avec ce contenu :
+
+```env
+DB_HOST=db
+DB_PORT=5432
+DB_NAME=ia_mobility
+DB_USER=toi
+DB_PASSWORD=ton_password
+
+ORS_API_KEY=ton_truc
+WEATHER_API_KEY=ton_truc
+HERE_API_KEY=ton_truc
+
+SESSION_SECRET=une_chaine_aleatoire_longue_et_secrete
+
+PORT=3000
+```
+
+---
+
+## 3. Installer les dépendances Node.js
+
+À la **racine** du projet :
 
 ```bash
 npm install
-
 ```
 
-### 2. Lancer le Frontend
+---
 
-Pour tester l'interface et la carte :
+## 4. Lancer le Backend + Base de données (Docker)
+
+```bash
+cd apps/backend
+docker-compose up --build
+```
+
+> La première fois, Docker va télécharger les images et créer la base de données automatiquement. Cela peut prendre 1 à 2 minutes.  
+> Les fois suivantes, `docker-compose up` suffit (sans `--build`).
+
+Le backend est prêt quand vous voyez : `Server running on port 3000`
+
+**Vérification :** Ouvrez [http://localhost:3000](http://localhost:3000) — vous devriez voir `{"message":"IA Mobility backend running + Auth running"}`
+
+---
+
+## 5. Lancer le service IA (Python)
+
+Ouvrez un **nouveau terminal** et exécutez :
+
+**Mac/Linux :**
+```bash
+cd apps/ai-service
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python3 main.py
+```
+
+**Windows (PowerShell) :**
+```powershell
+cd apps\ai-service
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+python main.py
+```
+
+> Si PowerShell refuse l'activation du venv (erreur de politique d'exécution), lancez d'abord :
+> ```powershell
+> Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+> ```
+
+Le service IA est prêt quand vous voyez : `Running on http://0.0.0.0:5001`
+
+---
+
+## 6. Lancer le Frontend
+
+Ouvrez un **nouveau terminal** à la **racine** du projet :
 
 ```bash
 npm run dev -w @ia-mobility/frontend
+```
 
+Le frontend est prêt quand vous voyez : `Local: http://localhost:5173/`
+
+**Ouvrez [http://localhost:5173](http://localhost:5173) dans votre navigateur.**
+
+---
+
+## Ports utilisés
+
+| Service | URL | Description |
+|---|---|---|
+| Frontend | [http://localhost:5173](http://localhost:5173) | Interface utilisateur |
+| Backend API | [http://localhost:3000](http://localhost:3000) | API Node.js |
+| Service IA | [http://localhost:5001](http://localhost:5001) | Prédiction parking (Python) |
+| PostgreSQL | `localhost:5432` | Base de données (Docker) |
+
+---
+
+## Structure du projet
+
+```
+IA_Mobility/
+├── apps/
+│   ├── frontend/        # React + Vite + TypeScript + Leaflet
+│   ├── backend/         # Node.js + Express + PostgreSQL (Docker)
+│   │   ├── docker-compose.yml
+│   │   ├── .env         # ← à créer (voir étape 2)
+│   │   └── database/    # Schéma SQL (auto-injecté au 1er démarrage)
+│   └── ai-service/      # Python Flask + Random Forest (prédiction parking)
+├── packages/            # Packages partagés (monorepo)
+└── package.json         # Config monorepo npm workspaces
 ```
 
 ---
 
-## Rappel bref des tâches (regarder le trello)
+## Problèmes fréquents
 
-### Frontend (Lead: Teddy)
+**Docker ne démarre pas**
+→ Vérifiez que Docker Desktop est ouvert et running (icône baleine dans la barre des tâches).
 
-* Déjà fait : Init React/Vite, Intégration Leaflet, Config App.tsx.
-* À faire : Créer les formulaires d'adresses et gérer l'affichage des 5 trajets optimisés.
+**Erreur `port already in use`**
+→ Un service tourne déjà sur ce port. Arrêtez-le ou changez le port dans `.env`.
 
-### Authentification et RGPD (Lead: Laurent)
+**Windows : `python3` introuvable**
+→ Sur Windows, la commande est `python` (sans le `3`). Vérifiez avec `python --version`.
 
-* Implémenter la création de compte et connexion.
-* Configurer BetterAuth avec hachage Argon2.
-* Mettre en place l'OAuth Google et la protection CSRF.
-* Gérer le schéma "Users" en base de données.
+**Erreur de connexion à la base de données**
+→ Attendez quelques secondes que PostgreSQL soit complètement démarré avant que le backend ne se connecte. Docker gère ça automatiquement avec `depends_on`.
 
-### IA et Moteur de recherche (Lead: Mamor)
-
-* Collecter les données de parking (Open Data).
-* Feature engineering et entraînement du modèle Random Forest.
-* Créer l'endpoint /predict via FastAPI.
-
-### Infrastructure et Smart Search (Lead: Boubacar)
-
-* Configuration de PostgreSQL avec Docker.
-* Mise en place de Drizzle ORM.
-* Intégration des APIs (Google Directions, Météo, Trafic) et agrégation des données.
-
----
-
-## Structure du dossier apps/
-
-* frontend/ : Interface React + Leaflet (déjà configurée).
-* backend/ : API Node.js (à développer par Laurent).
-* ai-service/ : Service Python FastAPI (à développer par Mamor).
-
----
-
-## Notes importantes
-
-* Leaflet : J'ai dû modifier App.tsx pour afficher la carte.
-* Git : Travaillez sur vos branches respectives et faites des Pull Requests vers main.
-
-
-
+**Le frontend affiche une carte vide**
+→ Vérifiez que le backend tourne bien sur le port 3000 (étape 4).

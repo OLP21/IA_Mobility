@@ -1,0 +1,65 @@
+name: CI Backend (Node.js)
+
+# Se déclenche à chaque push ou Pull Request sur la branche Teddy et main
+on:
+  push:
+    branches: [Teddy, main]
+    paths:
+      - 'apps/backend/**'
+  pull_request:
+    branches: [Teddy, main]
+    paths:
+      - 'apps/backend/**'
+
+jobs:
+  test-backend:
+    name: Tests Jest - API Node.js
+    runs-on: ubuntu-latest
+
+    # Lance un vrai PostgreSQL pour les tests
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: teddy
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: ia_mobility_test
+        ports:
+          - 5432:5432
+        # Attend que PostgreSQL soit prêt avant de lancer les tests
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      # 1. Récupère le code
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      # 2. Installe Node.js 18
+      - name: Installer Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: apps/backend/package-lock.json
+
+      # 3. Installe les dépendances du backend
+      - name: Installer les dépendances
+        working-directory: apps/backend
+        run: npm install
+
+      # 4. Lance les tests Jest
+      - name: Lancer les tests Jest
+        working-directory: apps/backend
+        env:
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_NAME: ia_mobility_test
+          DB_USER: teddy
+          DB_PASSWORD: test_password
+          SESSION_SECRET: test_secret_for_ci
+          NODE_ENV: test
+        run: npm test

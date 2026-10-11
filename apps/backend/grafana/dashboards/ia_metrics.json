@@ -1,0 +1,40 @@
+{
+  "id": null,
+  "uid": "ia_metrics",
+  "title": "MLOps - IA Mobility",
+  "tags": [],
+  "style": "dark",
+  "timezone": "browser",
+  "editable": true,
+  "hideControls": false,
+  "graphTooltip": 0,
+  "schemaVersion": 38,
+  "version": 1,
+  "refresh": "5s",
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Total des requêtes de prédiction",
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 0 },
+      "targets": [
+        { "expr": "ai_prediction_requests_total", "refId": "A" }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Latence d'inférence (secondes)",
+      "gridPos": { "h": 8, "w": 16, "x": 8, "y": 0 },
+      "targets": [
+        { "expr": "rate(ai_inference_duration_seconds_sum[1m]) / rate(ai_inference_duration_seconds_count[1m])", "refId": "A" }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Valeur moyenne d'occupation prédite (%)",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 8 },
+      "targets": [
+        { "expr": "rate(ai_predicted_occupation_value_sum[1m]) / rate(ai_predicted_occupation_value_count[1m])", "refId": "A" }
+      ]
+    }
+  ]
+}

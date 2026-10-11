@@ -6,7 +6,6 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-
   ],
   "main": "index.js",
   "scripts": {
@@ -25,5 +24,8 @@
   "bugs": {
     "url": "https://github.com/OLP21/IA_Mobility/issues"
   },
-  "homepage": "https://github.com/OLP21/IA_Mobility#readme"
+  "homepage": "https://github.com/OLP21/IA_Mobility#readme",
+  "dependencies": {
+    "connect-pg-simple": "^10.0.0"
+  }
 }

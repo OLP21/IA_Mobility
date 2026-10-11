@@ -1,0 +1,31 @@
+name: CI Docker Build
+
+# Vérifie que les images Docker se construisent correctement
+on:
+  push:
+    branches: [Teddy, main]
+  pull_request:
+    branches: [Teddy, main]
+
+jobs:
+  build-backend:
+    name: Build Docker - Backend Node.js
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Build image Docker backend
+        run: docker build -t ia-mobility-backend ./apps/backend
+
+  build-ai-service:
+    name: Build Docker - Service IA Python
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Build image Docker service IA
+        run: docker build -t ia-mobility-ai-service ./apps/ai-service
